@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>window.onload()方法</title>
+    <style>
+        #bg {
+            width: 100px;
+            height: 100px;
+            border: 5px solid red;
+        }
+    </style>
+
+    <script>
+        window.onload = function () {
+            document.getElementById("bg").style.backgroundColor = "#000";
+            console.log("这是window.onload()方法")
+        }
+    </script>
+    <!-- 
+        如果不加window.onload()方法，
+        当执行到document.getElementById("bg").style.backgroundColor = "#000";的时候，
+        还没有加载到div对象，所以背景颜色没有设置成功
+     -->
+</head>
+
+<body>
+    <div id="bg"></div>
+</body>
+
+</html>

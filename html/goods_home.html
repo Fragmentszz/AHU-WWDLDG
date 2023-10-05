@@ -39,7 +39,7 @@
             cursor: pointer;
             margin-right: 10px;
         }
-        .category-label {
+        .lab {
             background-color: #888;
             color: #fff;
             border: none;
@@ -63,6 +63,7 @@
     </style>
 </head>
 <body>
+    
     <header>
         <h1>二手物品交易平台</h1>
         <div class="search-box">
@@ -73,97 +74,158 @@
             <label for="sort-select">价格排序：</label>
             <select id="sort-select">
                 <option value="asc">升序</option>
-                <option value="desc">降序</option>
+                <option value="desc">降序</option>  
             </select>
             <button class="sort-button" onclick="sortItems()">排序</button>
         </div>
         <div>
-            <button class="category-button" onclick="filterItems('全部')">全部</button>
-            <button class="category-button" onclick="filterItems('生活用品')">生活用品</button>
-            <button class="category-button" onclick="filterItems('交通工具')">交通工具</button>
-            <button class="category-button" onclick="filterItems('学习用品')">学习用品</button>
-            <button class="category-button" onclick="filterItems('其他')">其他</button>
+            <button id="allgoods" class="category-button"  onclick = "getGids(this)" attr = "null">全部</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "life">生活用品</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "transport">交通工具</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "study">学习用品</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "other">其他</button>
         </div>
     </header>
-    <div class="container">
+    <div id = "items" class="container">
         <h2>二手物品列表</h2>
-        <div class="item" data-category="交通工具" data-price="150">
-            <h3>物品名称: 二手自行车</h3>
-            <p>描述: 26寸山地自行车，用过两年，轮胎换新。</p>
-            <p>价格: $150</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 交通工具</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <div class="item" data-category="学习用品" data-price="500">
-            <h3>物品名称: 二手笔记本电脑</h3>
-            <p>描述: 15寸Dell笔记本，配置高，适合学习。</p>
-            <p>价格: $500</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 学习用品</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <!-- 添加更多二手物品信息 -->
-        <div class="item" data-category="生活用品" data-price="200">
-            <h3>物品名称: 二手家具</h3>
-            <p>描述: 实木书桌和椅子，适合家庭办公。</p>
-            <p>价格: $200</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 生活用品</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <div class="item" data-category="其他" data-price="250">
-            <h3>物品名称: 二手音响系统</h3>
-            <p>描述: 高保真音响系统，带有多功能遥控器。</p>
-            <p>价格: $250</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 其他</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <div class="item" data-category="生活用品" data-price="50">
-            <h3>物品名称: 二手咖啡机</h3>
-            <p>描述: Nespresso咖啡机，附带咖啡胶囊。</p>
-            <p>价格: $50</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 生活用品</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <div class="item" data-category="交通工具" data-price="300">
-            <h3>物品名称: 电动滑板车</h3>
-            <p>描述: Xiaomi电动滑板车，最大速度25km/h。</p>
-            <p>价格: $300</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 交通工具</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <!-- 继续添加更多二手物品 -->
-        <div class="item" data-category="学习用品" data-price="30">
-            <h3>物品名称: 二手教科书</h3>
-            <p>描述: 大学生物学教科书，几乎全新。</p>
-            <p>价格: $30</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 学习用品</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <div class="item" data-category="交通工具" data-price="120">
-            <h3>物品名称: 二手滑雪板</h3>
-            <p>描述: Salomon滑雪板，适合初学者。</p>
-            <p>价格: $120</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 交通工具</p>
-            <button class="buy-button">购买</button>
-        </div>
-        <div class="item" data-category="其他" data-price="80">
-            <h3>物品名称: 二手瑜伽垫</h3>
-            <p>描述: Liforme瑜伽垫，环保材料。</p>
-            <p>价格: $80</p>
-            <p>联系卖家: 卖家姓名</p>
-            <p class="category-label">分类: 其他</p>
-            <button class="buy-button">购买</button>
-        </div>
     </div>
+    <div>
+        <button onclick = "create(0)" attr = null>
+            1
+        </button>
+
+    </div>
+    <div>
+        <button onclick = "getGids(this)" attr = null>
+            2
+        </button>
+    </div>
+    <script>
+
+    </script>
 
     <script>
+        var nowid = 0;
+        var gids = [];
+        var over = 0;
+        let dic = ["describe","price","contact","lab"];
+        let dic2 = ["描述：","价格:￥","联系方式:","类别:"];
+        let trans = {"other":"其他","life":"生活用品","study":"学习用品","transport":"交通工具"};
+        var nowlab = "null";
+        function refresh()
+        {
+            var items = document.getElementsByClassName("item");
+            while (items.length > 0) {
+                items[0].parentNode.removeChild(items[0]);
+            }
+            for(let i = 0; i < 5; i++) {
+                create(nowid);
+                nowid++;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            getGids(document.getElementById("allgoods"));
+
+        });
+        window.onscroll = function() {
+                // 判断是否滚动到页面底部
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                    // 滚动到页面底部时执行的代码
+                    if(nowid < gids.length && !over){
+                        create(nowid);
+                        nowid++;
+                    }
+                    else if(!over){
+                        alert("到底了");
+                        over = 1;
+                    }
+                }
+                };
+        var num = 6;
+        var mode = 0;
+        function getGids(button)
+        {
+            let attr = button.getAttribute("attr");
+            console.log(attr);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/show_goods", false);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // 请求成功，处理响应数据
+                    var response = JSON.parse(xhr.responseText);
+                    gids = response["gids"];
+                    console.log(gids.length);
+                    nowlab = attr;
+                    nowid = 0;
+                    refresh();
+                    over = 0;
+                    //alert(gids[0]);
+                } else {
+                    // 请求失败，处理错误
+                    document.getElementById("response").innerHTML = "请求失败，状态码：" + xhr.status;
+                }
+            };
+            var requestData = {
+                "attr":attr
+            };
+            // 将数据转换为JSON格式
+            var jsonRequestData = JSON.stringify(requestData);
+            // 发送请求
+            xhr.send(jsonRequestData);
+        }
+        function toString(num)
+        {
+            var res = "";
+            do{
+                res = String.fromCharCode(num % 10 + 48) + res;
+                num = parseInt(num / 10);
+            }while(num > 0)
+            return res;
+        }
+        function create(nowgoods)
+        {
+            // if(nowgoods >= gids.length){nowgoods--;}
+            var xhr = new XMLHttpRequest();
+            let gid = gids[nowgoods];
+            xhr.open("POST", "/select_goods", false);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // 请求成功，处理响应数据
+                    var result = JSON.parse(xhr.responseText);
+                    console.log(result);
+                    var index = "item" + toString(nowgoods)
+                    var div = document.createElement("div");
+                    div.className = "item";
+                    var p;
+                    p = document.createElement('h3');
+                    p.innerHTML = "物品名称:" + result["gname"];
+                    div.appendChild(p);
+                    for(i=0;i<4;i++)
+                    {
+                        p = document.createElement('p');
+                        if(i != 3)  {
+                            p.id = index + '_' + dic[i];p.className = dic[i];p.innerHTML = dic2[i] + result[dic[i]];
+                        }else {
+                            p.id = index + '_' + dic[i];p.className = dic[i];p.innerHTML = dic2[i] + trans[result[dic[i]]];
+                        }
+                        div.appendChild(p);
+                    }
+                    p = document.createElement("button");p.id = index + '_' + 'button';p.className  = "buy-button";
+                    p.innerHTML = "购买";
+                    div.appendChild(p);        
+                    document.getElementById("items").appendChild(div);
+                } else {
+                    return null;
+                }
+            };
+            var requestData = {
+                "gid":gid
+            };
+            // 将数据转换为JSON格式
+            var jsonRequestData = JSON.stringify(requestData);
+            // 发送请求
+            xhr.send(jsonRequestData);
+        }
         function filterItems(category) {
             const items = document.querySelectorAll('.item');
             items.forEach(item => {
@@ -223,5 +285,6 @@
 }
 
     </script>
+    
 </body>
 </html>

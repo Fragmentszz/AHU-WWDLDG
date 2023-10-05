@@ -55,8 +55,8 @@ let insert_g_dic = {
     "object" : "\"WWDLDG\".goods",
     "restriction":""
 }
-
+var numcount = {"c":0,"s":0,"f":0,"g":0};
 
 module.exports = {
-    login_dic,register_dic,select_c_dic,select_f_dic,select_g_dic,select_s_dic,insert_c_dic,insert_f_dic,insert_g_dic,insert_s_dic
+    login_dic,register_dic,select_c_dic,select_f_dic,select_g_dic,select_s_dic,insert_c_dic,insert_f_dic,insert_g_dic,insert_s_dic,numcount
 };
