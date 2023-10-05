@@ -20,14 +20,21 @@ let toSelect = function(dic)
         }
         res += '\nwhere\n';
         tmp = "";
-        for(i = 0;i<keys.length - 1;i++){
-            if(typeof(equal[keys[i]]) === 'string'){
+        for(let i = 0;i<keys.length - 1;i++){
+            console.log(keys[i]);
+            if(keys[i] === 'connection'){
+                res += equal[keys[i]] + ' and ';
+            }else if(keys[i].indexOf("IN") != -1 || keys[i].indexOf("LIKE") != -1){
+                res += equal[keys[i]] + ' and ';
+            }else if(typeof(equal[keys[i]]) === 'string'){
                 res += keys[i] + '=' + '\'' + equal[keys[i]] + '\'' + ' and ';
             }else {
                 res += keys[i] + '=' + equal[keys[i]] + ' and ';
             }
         }
-        if(typeof(equal[keys[keys.length - 1]]) === 'string'){
+        if(keys[keys.length - 1] === 'connection' || keys[keys.length - 1].indexOf("IN") != -1 || keys[keys.length - 1].indexOf("LIKE") != -1){
+            res += equal[keys[keys.length - 1]];
+        }else if(typeof(equal[keys[keys.length - 1]]) === 'string'){
             res += keys[keys.length - 1] + '=' + '\'' + equal[keys[keys.length - 1]] + '\'';
         }else {
             res += keys[keys.length - 1] + '=' + equal[keys[keys.length - 1]];

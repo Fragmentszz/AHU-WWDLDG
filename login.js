@@ -30,8 +30,6 @@ server.post('/login_c',(req,res) => {
                     console.log(dbres.rows[0].uid,body.dic["username"],TIME(),'登陆');
                     req.session.uid = dbres.rows[0].uid;
                     res.send({"error_code" :0,"uid" : dbres.rows[0].uid});
-                    
-                    //res.end();
                 }else {
                     res.json({"error_code" :2, "uid":dbres.rows[0].uid});
                     res.end();

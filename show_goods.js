@@ -23,13 +23,13 @@ server.post('/show_goods',(req,res) =>{
     req.on('end',()=>{
         body.dic = JSON.parse(body.ori);
         attr = body.dic["attr"];
-        //console.log(attr);
         let sqldic = {...vr.select_g_dic,"attribute":["gid"],"equal":{}};
         if(attr != "null"){
             sqldic["equal"] = {"lab":attr};
         }
         
         let sql = toSQL.toSelect(sqldic);
+        //console.log(sql);
         let result = {"code":0,"gids": new Array()};
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
@@ -56,9 +56,9 @@ server.post('/select_goods',(req,res) => {
     });   
     req.on('end',()=>{
         body.dic = JSON.parse(body.ori);
-        console.log(body.dic);
         let gid = body.dic["gid"];
-        let sqldic = {...vr.select_g_dic,"attribute":["*"],"equal":{"gid":gid}};
+        let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".goods.sid = \"WWDLDG\".seller.sid"}};
+        sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".seller";
         let sql = toSQL.toSelect(sqldic);
         //console.log(sql);
         db.dbpool.query(sql,(err,dbres) => {
@@ -73,5 +73,42 @@ server.post('/select_goods',(req,res) => {
         });
     })
 });
-
+server.post('/search_goods_byNames',(req,res) =>{
+    var body = {ori:"",dic:{}};
+    req.on('data', chunk=>{
+        body.ori += chunk;
+    });   
+    req.on('end',()=>{
+        body.dic = JSON.parse(body.ori);
+        var sqldic = {...vr.select_g_dic,"attribute":["gid"],"equal":{}};
+        sqldic["object"] = "\"WWDLDG\".goods";
+        if(body.dic["lab"] != "null"){
+            sqldic["equal"]["lab"] = body.dic["lab"];
+        }
+        if(body.dic["gname"] != ""){
+            sqldic["equal"]["LIKE"] ="\"WWDLDG\".goods.gname" + " LIKE " + "\'%" + body.dic["gname"] + "%\'";
+        }
+        if(body.dic["restriction"] != ""){
+            sqldic["restriction"] = "\nOrder BY price " + body.dic["restriction"];
+        }
+        console.log(sqldic);
+        let sql = toSQL.toSelect(sqldic);
+        console.log(sql);
+        db.dbpool.query(sql,(err,dbres) => {
+            if(err){
+                console.log(err);
+                res.statusCode = 500;
+                res.send("no");
+                return;
+            }
+            //console.log(dbres);
+            result = {"gids":[]};
+            for(i=0;i<dbres["rows"].length;i++)
+            {
+                result["gids"].push(dbres.rows[i]["gid"]);
+            }
+            res.send(result);
+        });
+    })
+});
 module.exports= server;

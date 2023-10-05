@@ -73,10 +73,11 @@
         <div class="sort-dropdown">
             <label for="sort-select">价格排序：</label>
             <select id="sort-select">
+                <option value="random">任意</option>
                 <option value="asc">升序</option>
                 <option value="desc">降序</option>  
             </select>
-            <button class="sort-button" onclick="sortItems()">排序</button>
+            <!-- <button class="sort-button" onclick="sortItems()">排序</button> -->
         </div>
         <div>
             <button id="allgoods" class="category-button"  onclick = "getGids(this)" attr = "null">全部</button>
@@ -89,17 +90,6 @@
     <div id = "items" class="container">
         <h2>二手物品列表</h2>
     </div>
-    <div>
-        <button onclick = "create(0)" attr = null>
-            1
-        </button>
-
-    </div>
-    <div>
-        <button onclick = "getGids(this)" attr = null>
-            2
-        </button>
-    </div>
     <script>
 
     </script>
@@ -108,8 +98,8 @@
         var nowid = 0;
         var gids = [];
         var over = 0;
-        let dic = ["describe","price","contact","lab"];
-        let dic2 = ["描述：","价格:￥","联系方式:","类别:"];
+        let dic = ["describe","price","qq","lab"];
+        let dic2 = ["描述：","价格:￥","卖家QQ:","类别:"];
         let trans = {"other":"其他","life":"生活用品","study":"学习用品","transport":"交通工具"};
         var nowlab = "null";
         function refresh()
@@ -118,14 +108,13 @@
             while (items.length > 0) {
                 items[0].parentNode.removeChild(items[0]);
             }
-            for(let i = 0; i < 5; i++) {
+            for(let i = 0; i < 5 && nowid < gids.length; i++) {
                 create(nowid);
                 nowid++;
             }
         }
         document.addEventListener("DOMContentLoaded", function() {
             getGids(document.getElementById("allgoods"));
-
         });
         window.onscroll = function() {
                 // 判断是否滚动到页面底部
@@ -140,18 +129,15 @@
                         over = 1;
                     }
                 }
-                };
-        var num = 6;
-        var mode = 0;
+        };
+
         function getGids(button)
         {
             let attr = button.getAttribute("attr");
-            console.log(attr);
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/show_goods", false);
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    // 请求成功，处理响应数据
                     var response = JSON.parse(xhr.responseText);
                     gids = response["gids"];
                     console.log(gids.length);
@@ -159,9 +145,7 @@
                     nowid = 0;
                     refresh();
                     over = 0;
-                    //alert(gids[0]);
                 } else {
-                    // 请求失败，处理错误
                     document.getElementById("response").innerHTML = "请求失败，状态码：" + xhr.status;
                 }
             };
@@ -170,6 +154,27 @@
             };
             // 将数据转换为JSON格式
             var jsonRequestData = JSON.stringify(requestData);
+            // 发送请求
+            xhr.send(jsonRequestData);
+        }
+        function search_goods(sqldic)
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/search_goods_byNames", false);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    gids = response["gids"];
+                    console.log(gids.length);
+                    nowid = 0;
+                    refresh();
+                    over = 0;
+                } else {
+                    document.getElementById("response").innerHTML = "请求失败，状态码：" + xhr.status;
+                }
+            };
+            // 将数据转换为JSON格式
+            var jsonRequestData = JSON.stringify(sqldic);
             // 发送请求
             xhr.send(jsonRequestData);
         }
@@ -215,7 +220,7 @@
                     div.appendChild(p);        
                     document.getElementById("items").appendChild(div);
                 } else {
-                    return null;
+                    return;
                 }
             };
             var requestData = {
@@ -226,63 +231,28 @@
             // 发送请求
             xhr.send(jsonRequestData);
         }
-        function filterItems(category) {
-            const items = document.querySelectorAll('.item');
-            items.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                if (category === '全部' || category === itemCategory) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
         function searchItems() 
         {
-        const searchInput = document.getElementById('search-input');
-        const searchTerm = searchInput.value.toLowerCase(); // Convert input to lowercase for case-insensitive search
-        const items = document.querySelectorAll('.item');
-
-        items.forEach(item => {
-        const itemName = item.querySelector('h3').textContent.toLowerCase();
-
-        // Check if the item name contains the search term
-        if (itemName.includes(searchTerm)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
+            const searchInput = document.getElementById('search-input').value;
+            const order = document.getElementById('sort-select').value;
+            let sqldic = {"lab":nowlab,"gname":"","restriction":""};
+            if(searchInput != ""){
+                sqldic["gname"] = searchInput;
+            }
+            if(order != 'random'){
+                sqldic["restriction"] = order;
+            }
+            search_goods(sqldic);
         }
-        });
-}
 
-
-        function sortItems() {
-        const sortSelect = document.getElementById('sort-select');
-        const sortOrder = sortSelect.value; // Get the selected sorting order (asc or desc)
-        const itemsContainer = document.querySelector('.container');
-        const items = Array.from(document.querySelectorAll('.item'));
-
-        // Sort items based on their data-price attribute
-        items.sort((a, b) => {
-        const priceA = parseFloat(a.getAttribute('data-price'));
-        const priceB = parseFloat(b.getAttribute('data-price'));
-
-        if (sortOrder === 'asc') {
-            return priceA - priceB;
-        } else {
-            return priceB - priceA;
-        }
-        });
 
         // Remove items from the container
         itemsContainer.innerHTML = '';
 
         // Append sorted items back to the container
         items.forEach(item => {
-        itemsContainer.appendChild(item);
+            itemsContainer.appendChild(item);
          });
-}
 
     </script>
     
