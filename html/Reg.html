@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <style>
+        body {
+            background-image: url('Register_background2.jpg'); /* 背景图片的URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center; /* 将文本内容居中 */
+        }
+        h1 {
+            margin-top: 20px; /* 可选：增加一些上边距以使标题更好看 */
+        }
+        #registration-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            padding: 90px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="text"], input[type="password"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #2389f6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        #account-type 
+        {
+        width: 108%; /* 您可以根据需要调整宽度值 */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="registration-form">
+        <h2>用户注册</h2>
+        <form id="user-registration-form">
+            <!-- 使用<select>元素创建账户类型的下拉菜单 -->
+            <label for="account-type">账户类型:</label>
+            <select id="account-type" name="account-type" required="">
+                <option value="s">卖家</option>
+                <option value="c">买家</option>
+                <option value="f">配送员</option>
+            </select><br>
+
+            <label for="account">用户账号:</label>
+            <input type="text" id="account" name="account" required=""><br>
+
+            <label for="password">用户密码:</label>
+            <input type="password" id="password" name="password" required=""><br>
+
+            <label for="confirm-password">确认密码:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required=""><br>
+
+            <label for="qq">QQ号码:</label>
+            <input type="text" id="qq" name="qq" required=""><br>
+
+            <label for="phone">联系电话:</label>
+            <input type="text" id="phone" name="phone" required=""><br>
+
+            <button type="submit">注册</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("user-registration-form");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            // 获取用户输入的值
+            const accountType = document.getElementById("account-type").value;
+            const account = document.getElementById("account").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            const qq = document.getElementById("qq").value;
+            const phone = document.getElementById("phone").value;
+            const dic = {"s" : "卖家","c":"买家","f":"配送员"};
+            if (accountType && account && password && confirmPassword) {
+                if (password === confirmPassword) {
+                    var xhr = new XMLHttpRequest();
+                    // 指定请求方法、URL和是否异步
+                    xhr.open("POST", "/register_c", false);
+                    // 设置请求头（可选）
+                    // 定义请求完成时的回调函数
+                    xhr.onload = function() {
+                        if (xhr.status === 500) {
+                            // 请求成功，处理响应数据
+                            var response = JSON.parse(xhr.responseText);
+                            //document.getElementById("response").innerHTML = "响应数据: " + JSON.stringify(response);
+                            if(response["error_code"] === 1){
+                                alert("用户名已存在~");
+                            }else{
+                                alert("数据库出错了...");
+                            }
+                        }else {
+                            var response = JSON.parse(xhr.responseText);
+                            var str = "欢迎你，第" + response["cnt"] + "位" + dic[accountType];
+                            alert("注册成功" + str);
+                            window.location.href = "./"; // 更改为你要跳转的网站URL
+                        }
+                    };
+                    // 构建要发送的数据
+                    var requestData = {
+                        "username": account,
+                        "pswrd" : password,
+                        "accountType" : accountType,
+                        "qq" : qq,
+                        "phone" : phone
+                    };
+                    // 将数据转换为JSON格式
+                    var jsonRequestData = JSON.stringify(requestData);
+
+                    // 发送请求
+                    xhr.send(jsonRequestData);
+                    // 注册成功，跳转到其他网站
+                    
+                } else {
+                    alert("确认密码与密码不一致，请重新输入");
+                }
+            } else {
+                alert("请填写完整的注册信息");
+            }
+        });
+    </script>
+</body>
+</html>

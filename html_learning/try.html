@@ -1,0 +1,67 @@
+<html>
+
+    <head>
+
+    </head>
+<body>
+    <div id="d1">
+        <p id="p1">Hello World!</p>
+        <h3 id="h31">en?</h3>
+    </div>
+    <div id="container">
+
+    </div>
+    <div>
+        <button id="aa" onClick="create()">
+            "点一下试试"
+        </button>
+    </div>
+    <div class="item" data-category="其他" data-price="80" gid = "">
+        <h3>物品名称: 二手瑜伽垫</h3>
+        <p class = "describe">描述: Liforme瑜伽垫，环保材料。</p>
+        <p class = "price">价格: $80</p>
+        <p class = "contact">联系卖家: 卖家姓名</p>
+        <p class="category-label">分类: 其他</p>
+        <button class="buy-button">购买</button>
+    </div>
+
+</body>
+<script>
+    let nowgoods = 0;
+    let gids = [];
+    let dic = ["describe","price","contact","category-label"];
+    function toString(num)
+    {
+        var res = "";
+        do{
+            res = String.fromCharCode(num % 10 + 48) + res;
+            num = parseInt(num / 10);
+        }while(num > 0)
+        return res;
+    }
+    function callback() 
+    {
+        var e1 = document.getElementById("d1").firstElementChild;
+        alert(e1.nextElementSibling.innerText);
+        
+    }
+    function create()
+        {
+            alert(nowgoods);
+            var index = "item" + toString(nowgoods)
+            var div = document.createElement("div");
+            var p;
+            for(i=0;i<4;i++)
+            {
+                p = document.createElement('p');
+                p.id = index + '_' + dic[i];p.class = dic[i];p.innerHTML = nowgoods;
+                //p.gid = gids[nowgoods];
+                div.appendChild(p);
+            }
+            p = document.createElement("button");p.id = index + '_' + 'button';p.class = "buy-button";
+            div.append(p);
+            document.getElementById("container").appendChild(div);
+            nowgoods++;
+        }
+</script>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AHU二手交易市场</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+   <style>
+            
+        body {
+            /* background: url('./background.jpg') no-repeat center; */
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 25px;
+            border-radius: 5px;
+            width: 300px;
+            animation: fadeIn ease 3s;
+            text-align: center; /* 居中内容 */
+            z-index: 100;
+        }
+
+        /* 悬停效果 */
+        .container:hover {
+            transform: scale(1.1);
+        }
+
+        /* 鼠标粒子效果容器 */
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* 完全透明的黑色背景 */
+            background-color: rgba(0, 0, 0, 0); 
+        }
+
+        input {
+            width: 95%;
+            margin: 10px auto;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid gray;
+        }
+
+        /* 新的样式 */
+        .button-container {
+            margin-top: 10px; /* 增加上边距以与输入字段分隔开 */
+            display: flex;
+            justify-content: space-between; /* 按钮左右对齐 */
+        }
+
+        .button-container button {
+            flex: 1; /* 按钮等宽分配可用空间 */
+            padding: 10px;
+            background-color: #1c86ee;
+            color: white;
+            border-radius: 10px;
+            margin: 0 5px; /* 添加左右间距 */
+        }
+        #particles-container {
+                position: absolute;
+                width: 100%;
+                opacity: 0.5;
+                height: 100%;
+                background-color: #333333; /* 背景颜色 */
+            }
+    </style>
+
+</head>
+<body>
+    
+    <div class="container">
+        <h1>AHU二手交易市场</h1>
+        <label for="username">用户名:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">密码:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <div class="button-container">
+            <button onClick="login()">登录</button>
+            <button onClick="register()">注册</button>
+        </div>
+    </div>
+    <div id="particles-container"></div>
+    <script>
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var xhr = new XMLHttpRequest();
+            // 指定请求方法、URL和是否异步
+            xhr.open("POST", "/login_c", false);
+            // 设置请求头（可选）
+            //xhr.setRequestHeader("Content-Type", "application/json");
+            // 定义请求完成时的回调函数
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // 请求成功，处理响应数据
+                    var response = JSON.parse(xhr.responseText);
+                    //document.getElementById("response").innerHTML = "响应数据: " + JSON.stringify(response);
+                    if(response["error_code"] === 1){
+                        alert("找不到用户");
+                    }else if(response["error_code"] === 2){
+                        alert("密码错误！");
+                    }else{
+                        window.location.href = "./goods";
+                    }
+                } else {
+                    // 请求失败，处理错误
+                    document.getElementById("response").innerHTML = "请求失败，状态码：" + xhr.status;
+                }
+            };
+            // 构建要发送的数据
+            var requestData = {
+                "username": username,
+                "pswrd" : password
+            };
+            // 将数据转换为JSON格式
+            var jsonRequestData = JSON.stringify(requestData);
+
+            // 发送请求
+            xhr.send(jsonRequestData);
+        }
+        function register() {
+            // Redirect to the registration page (replace with the registration page URL)
+            window.location.href = "./Reg.html";
+        }
+
+        particlesJS('particles-container', {
+            "particles": {
+                "number": {
+                    "value": 100, // 粒子数量
+                    "density": {
+                        "enable": true,
+                        "value_area": 800 // 粒子密度
+                    }
+                },
+                "color": {
+                    "value": "#ffffff" // 粒子颜色
+                },
+                "shape": {
+                    "type": "circle", // 粒子形状
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5, // 粒子透明度
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3, // 粒子大小
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true, // 是否显示连接线
+                    "distance": 150, // 连接线的距离
+                    "color": "#ffffff", // 连接线的颜色
+                    "opacity": 0.4, // 连接线的透明度
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 3,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>

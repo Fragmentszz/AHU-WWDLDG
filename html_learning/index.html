@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            img {
+                width: 1000px;
+                height: 800px;
+            }
+            
+            .box {
+                width: 500px;
+                height: 500px;
+                line-height: 500px;
+                text-align: center;
+                font-size: 50px;
+                color: red;
+                border: 1px solid;
+            }
+            /*设置动画*/
+            
+            @keyframes key {
+                0% {
+                    margin-left: -50px;
+                    opacity: 0;
+                }
+                50% {
+                    margin-left: 50px;
+                    opacity: .5;
+                }
+                100% {
+                    margin-left: 0;
+                    opacity: 1;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <img src="./background.jpg" />
+        <img src="./background.jpg" />
+        <div class="box">div以动画方式出现</div>
+        <script>
+            var box = document.querySelector(".box");
+            //用js检测鼠标滚轮距离顶部位置来给div添加动画
+            window.onscroll = function() {
+                //检测鼠标滚轮距离顶部位置
+                var top = document.documentElement.scrollTop || document.body.scrollTop;
+                console.log(top);
+                //要设置到DIV显示出来时给div添加动画 也可以设置一个数值只要保证div出来给它加动画即可
+                if(top > (box.offsetTop - box.offsetHeight)) {　　　　　　　　　　　　
+                    box.style.animation = "key .25s linear 2" //添加动画  
+                    　　　　　　　　
+                }
+            }
+        </script>
+
+    </body>
+
+</html>

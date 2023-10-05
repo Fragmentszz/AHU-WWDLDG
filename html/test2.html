@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>发送POST请求示例</title>
+</head>
+<body>
+    <h1>发送POST请求并处理响应</h1>
+    <button id="sendRequest">发送POST请求</button>
+    <div id="response"></div>
+    <script>
+        document.getElementById("sendRequest").addEventListener("click", function() {
+            // 创建一个XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+            // 指定请求方法、URL和是否异步
+            xhr.open("POST", "http://172.19.5.118:1234/login_c", false);
+            // 设置请求头（可选）
+            //xhr.setRequestHeader("Content-Type", "application/json");
+            // 定义请求完成时的回调函数
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // 请求成功，处理响应数据
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById("response").innerHTML = "响应数据: " + JSON.stringify(response);
+                } else {
+                    // 请求失败，处理错误
+                    document.getElementById("response").innerHTML = "请求失败，状态码：" + xhr.status;
+                }
+            };
+            // 构建要发送的数据
+            var requestData = {
+                "username": "aaa",
+                "pswrd" :"bbb"
+            };
+
+            // 将数据转换为JSON格式
+            var jsonRequestData = JSON.stringify(requestData);
+
+            // 发送请求
+            xhr.send(jsonRequestData);
+        });
+    </script>
+</body>
+</html>
