@@ -35,6 +35,8 @@ server.post('/show_goods',(req,res) =>{
             if(err){
                 console.log(err);
                 result.code = -1;
+
+                
                 res.statusCode = 500;
                 res.send(result);
                 return;
