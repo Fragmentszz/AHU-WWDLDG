@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+#right-content {
+    float: right; /* 将浮动属性修改为right */
+    width: 75%; /* 设置合适的宽度 */
+    padding: 15px;
+    overflow: hidden;
+}
+
+/* 修改iframe的样式 */
+#contentFrame {
+    width: 100%;
+    height: 80vh;
+}
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+nav {
+    width: 20%;
+    background-color: #f2f2f2;
+    float: left;
+    height: 100vh;
+}
+
+nav h2 {
+    text-align: center;
+}
+
+nav button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    text-align: left;
+    border: none;
+    background-color: #87CEEB; /* 淡蓝色 */
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 8px; /* 弧度 */
+    transition: background-color 0.3s ease; /* 添加渐变效果 */
+}
+
+nav button:hover {
+    background-color: #6495ED; /* 深蓝色，鼠标悬停时的颜色 */
+}
+
+main {
+    width: 80%;
+    float: left;
+    padding: 15px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+.item-list {
+    /* 样式化物品列表的样式 */
+    list-style: none;
+    padding: 0;
+}
+
+.item-list li {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+footer {
+    clear: both;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

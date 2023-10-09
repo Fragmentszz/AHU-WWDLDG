@@ -1,0 +1,43 @@
+body {
+    background-image: url('../backgound_img/Register_background2.jpg'); /* 背景图片的URL */
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center; /* 将文本内容居中 */
+}
+h1 {
+    margin-top: 20px; /* 可选：增加一些上边距以使标题更好看 */
+}
+#registration-form {
+    background-color: rgba(255, 255, 255, 0.8);
+    max-width: 800px;
+    padding: 90px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #2389f6;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+#account-type 
+{
+width: 108%; /* 您可以根据需要调整宽度值 */
+}

@@ -10,3 +10,4 @@ dist
 .vscode/
 manually-test-on-heroku.js
 yarn.lock
+useless/
