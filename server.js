@@ -58,6 +58,7 @@ var port = 80;
 server.listen(port,() =>{
     console.log("服务启动了>..");
     var sqldic = {...vr.select_c_dic,"attribute":["*"],"equal":{}};
+    // console.log(toSQL.toSelect(sqldic));
     db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
         if(err){
             console.log(err);

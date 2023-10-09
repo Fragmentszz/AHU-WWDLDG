@@ -4,11 +4,12 @@ var config = {
     user:'wwd',
     database:'postgres',
     password:'WWDldg!!!',
-    host:'127.0.0.1',
+    host:'172.19.11.158',
     port:'7654'
 };
 
 var pool = new pg.Pool(config);
+
 sqlrunning = {
     "result" : ""
 };
@@ -25,7 +26,15 @@ let Runsql = function(sql)
     return sqlrunning.result;
 }
 
-module.exports = {
-    Runsql:Runsql,
-    dbpool:pool
-};
+sql = "select *\nfrom \"WWDLDG\".customer";
+console.log(pool);
+pool.query(sql,(err,dbres) => {
+    if(err){
+        console.log(err);
+        return;
+    }
+ });
+// module.exports = {
+//     Runsql:Runsql,
+//     dbpool:pool
+// };

@@ -1,94 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>二手商品网页</title>
-  <style>
-    /* CSS样式 */
-    /* 样式可以根据需要进行自定义 */
-    body {
-      background-image: url('Register_background2.jpg'); /* 背景图片的URL */
-      font-family: Arial, sans-serif;
-    }
-    header {
-      background-color: #333;
-      color: #fff;
-      padding: 10px;
-    }
-    nav ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-    nav ul li {
-      display: inline-block;
-      margin-right: 10px;
-    }
-    .content {
-      margin: 20px;
-    }
-    .product-list {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 20px;
-    }
-    .product {
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-    .product img {
-      max-width: 100%;
-      height: auto;
-    }
-    .product-title {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .product-price {
-      color: #888;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手市场交易平台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #right-content {
+            float: right; /* 将浮动属性修改为right */
+            width: 75%; /* 设置合适的宽度 */
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        /* 修改iframe的样式 */
+        #contentFrame {
+            width: 100%;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            width: 20%;
+            background-color: #f2f2f2;
+            float: left;
+            height: 100vh;
+        }
+
+        nav h2 {
+            text-align: center;
+        }
+
+        nav button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            text-align: left;
+            border: none;
+            background-color: #87CEEB; /* 淡蓝色 */
+            cursor: pointer;
+            margin-bottom: 5px;
+            border-radius: 8px; /* 弧度 */
+            transition: background-color 0.3s ease; /* 添加渐变效果 */
+        }
+
+        nav button:hover {
+            background-color: #6495ED; /* 深蓝色，鼠标悬停时的颜色 */
+        }
+
+        main {
+            width: 80%;
+            float: left;
+            padding: 15px;
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        .item-list {
+            /* 样式化物品列表的样式 */
+            list-style: none;
+            padding: 0;
+        }
+
+        .item-list li {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        footer {
+            clear: both;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="#">主页</a></li>
-        <li><a href="#">分类</a></li>
-        <li><a href="#">搜索</a></li>
-        <li><a href="#">发布商品</a></li>
-        <li><a href="#">用户资料</a></li>
-      </ul>
-    </nav>
-  </header>
-  <div class="content">
-    <h1>二手商品列表</h1>
-    <div class="product-list">
-      <div class="product">
-        <img src="product1.jpg" alt="Product 1">
-        <div class="product-title">商品1</div>
-        <div class="product-price">$100</div>
-        <button>添加到购物车</button>
-      </div>
-      <div class="product">
-        <img src="product2.jpg" alt="Product 2">
-        <div class="product-title">商品2</div>
-        <div class="product-price">$200</div>
-        <button>添加到购物车</button>
-      </div>
-      <div class="product">
-        <img src="product3.jpg" alt="Product 3">
-        <div class="product-title">商品3</div>
-        <div class="product-price">$150</div>
-        <button>添加到购物车</button>
-      </div>
-      <!-- 更多商品... -->
-    </div>
-  </div>
-  <script>
-    // JavaScript代码
-    // 在此添加交互逻辑和事件处理程序
-    // 例如，点击按钮时将商品添加到购物车等
-    // 可以使用JavaScript框架（如jQuery）来简化代码
-  </script>
+
+<header>
+    <h1>二手市场交易平台</h1>
+</header>
+
+<nav>
+    <h2>导航栏</h2>
+    <button onclick="loadPage()">物品分类</button>
+    <button onclick="location.href='#发布商品'">发布商品</button>
+    <button onclick="location.href='#用户资料'">用户资料</button>
+</nav>
+<div id="right-content">
+    <!-- 右侧内容 -->
+    <iframe id="contentFrame" src="./goods_home.html" width="100%" height="600px" frameborder="0"></iframe>
+</div>
+<main id="main-content">
+    <!-- 默认显示的内容 -->
+    <section>
+        <h2>欢迎使用二手市场交易平台</h2>
+        <p>点击左侧按钮查看物品分类。</p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 二手市场交易平台</p>
+</footer>
+
+<script>
+    function showItemList() {
+        // 获取主要内容区域的引用
+        var mainContent = document.getElementById('main-content');
+
+        // 替换内容为物品列表
+        mainContent.innerHTML = `
+            <section id="物品分类">
+                <h2>物品分类</h2>
+                <ul class="item-list">
+                    <li>物品1</li>
+                    <li>物品2</li>
+                    <li>物品3</li>
+                    <!-- 在这里添加更多物品 -->
+                </ul>
+            </section>
+        `;
+    }
+    function loadPage(pageUrl) {
+            document.getElementById('contentFrame').src = './goods_home.html';
+        }
+</script>
+
 </body>
 </html>

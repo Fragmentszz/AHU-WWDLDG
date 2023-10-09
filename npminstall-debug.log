@@ -3,7 +3,7 @@
   registry: 'https://registry.npmmirror.com',
   pkgs: [
     {
-      name: 'postgresql-waterline-adapter',
+      name: 'openGauss-connector-nodejs',
       version: 'latest',
       type: 'tag',
       alias: undefined,
@@ -15,11 +15,11 @@
   cacheDir: 'C:\\Users\\FragmentsZ\\.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\FragmentsZ\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","postgresql-waterline-adapter"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\FragmentsZ\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","postgresql-waterline-adapter"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\FragmentsZ\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","openGauss-connector-nodejs"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\FragmentsZ\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","openGauss-connector-nodejs"]}',
     npm_config_user_agent: 'npminstall/7.11.0 npm/? node/v18.17.1 win32 x64',
     npm_config_cache: 'C:\\Users\\FragmentsZ\\.npminstall_tarball',
-    NODE: 'C:\\D\\nodejs\\node.exe',
-    npm_node_execpath: 'C:\\D\\nodejs\\node.exe',
+    NODE: 'C:\\D\\Node\\node.exe',
+    npm_node_execpath: 'C:\\D\\Node\\node.exe',
     npm_execpath: 'C:\\Users\\FragmentsZ\\AppData\\Roaming\\npm\\node_modules\\cnpm\\node_modules\\npminstall\\bin\\install.js',
     npm_config_userconfig: 'C:\\Users\\FragmentsZ\\.cnpmrc',
     npm_config_disturl: 'https://cdn.npmmirror.com/binaries/node',
