@@ -1,0 +1,6 @@
+let RegisterSession = function(uid)
+{
+
+
+    
+}
