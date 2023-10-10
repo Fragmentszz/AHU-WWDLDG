@@ -10,33 +10,25 @@ const showgoods = require('./show_goods.js');
 const server = exp();
 const register = require('./register.js');
 const login = require('./login.js');
+const ShoppingCart = require('./ShoppingCart.js');
+
+
+const cors = require('cors');
+
 var numcount = vr.numcount;
-var Sequelize = require("sequelize");
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-
-const sequelize = new Sequelize('postgres', 'wwd', 'WWDldg!!!', {
-    host: '127.0.0.1',
-    port:7654,
-    dialect: 'postgres'/* 选择 'mysql' | 'mariadb' | 'postgres' | 'mssql' 其一 */
-  });
-  
-
-server.use(exp.static('./html'));
-
 server.use(session({
     name:'sid',
     secret:'wwdldg',
     saveUninitialized:false,
     resave:true,
-    //store:  db.dbpool,
     cookie:{
         httpOnly:true,
         maxAge:1000*60*5
     }
 }))
-
+server.use(exp.static('./html'));
 server.use(showgoods);
-
+server.use(ShoppingCart);
 server.get('/',(req,res) => {
     let html1 = fs.readFileSync('./html/newlogin.html');
     res.set('Content-Type', 'text/html; charset=utf-8');
@@ -55,49 +47,24 @@ server.all('*',(req,res) => {
     res.send('404 NOT FOUND');
 });
 var port = 80;
+// var numcount = {"c":0,"s":0,"f":0,"g":0,"o":0};
 server.listen(port,() =>{
+    let list = ["c","s","f","g","o"];
+    let list2 = ["customer","seller","forwarder","goods","orders"];
     console.log("服务启动了>..");
-    var sqldic = {...vr.select_c_dic,"attribute":["*"],"equal":{}};
-    // console.log(toSQL.toSelect(sqldic));
-    db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
-        if(err){
-            console.log(err);
-            console.log("连接数据库失败...");
-            return;
-        }
-        numcount["c"] = dbres.rowCount;
-        console.log(numcount["c"]);
-    });
-    sqldic = {...vr.select_s_dic,"attribute":["*"],"equal":{}};
-    db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
-        if(err){
-            console.log(err);
-            console.log("连接数据库失败...");
-            return;
-        }
-        numcount["s"] = dbres.rowCount;
-        console.log(numcount["s"]);
-    });
-    sqldic = {...vr.select_f_dic,"attribute":["*"],"equal":{}};
-    db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
-        if(err){
-            console.log(err);
-            console.log("连接数据库失败...");
-            return;
-        }
-        numcount["f"] = dbres.rowCount;
-        console.log(numcount["f"]);
-    });
-    sqldic = {...vr.select_g_dic,"attribute":["*"],"equal":{}};
-    db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
-        if(err){
-            console.log(err);
-            console.log("连接数据库失败...");
-            return;
-        }
-        numcount["g"] = dbres.rowCount;
-        console.log(numcount["g"]);
-    });
+    for(let i=0;i<list.length;i++)
+    {
+        var sqldic = {...vr.getdic("select",list2[i]),"attribute":["*"],"equal":{}};
+        db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
+            if(err){
+                console.log(err);
+                console.log("连接数据库失败...");
+                return;
+            }
+            numcount[list[i]] = dbres.rowCount;
+            console.log(numcount[list[i]]);
+        });
+    }
 })
 
 

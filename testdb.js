@@ -7,7 +7,7 @@ var config = {
     host:'127.0.0.1',
     port:'7654'
 };
-
+console.log(pg.native);
 var pool = new pg.Pool(config);
 
 sqlrunning = {

@@ -59,7 +59,7 @@ server.post('/select_goods',(req,res) => {
         let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".goods.sid = \"WWDLDG\".seller.sid"}};
         sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".seller";
         let sql = toSQL.toSelect(sqldic);
-        console.log(sql);
+        //console.log(sql);
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
                 console.log(err);
