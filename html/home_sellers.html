@@ -14,8 +14,8 @@
 
 <nav>
     <h2>导航栏</h2>
-    <button onclick="loadPage()">物品分类</button>
-    <button onclick="location.href='#发布商品'">发布商品</button>
+    <button onclick="loadPage('goods_home.html')">查看商品</button>
+    <button onclick="loadPage('ReleaseGoods.html')">发布商品</button>
     <button onclick="location.href='#用户资料'">用户资料</button>
 </nav>
 <div id="right-content">
@@ -36,8 +36,14 @@
 
 <script>
     function loadPage(pageUrl) {
-            document.getElementById('contentFrame').src = './goods_home.html';
+            document.getElementById('contentFrame').src = pageUrl;
         }
+    window.addEventListener('message', function(event) {
+        console.log(event.data);
+        if (event.data === 'relogin') {
+            window.location.href = 'http://www.fragments.work/'; // 在父页面中跳转
+        }
+  });
 </script>
 
 </body>

@@ -5,6 +5,7 @@ let dic = ["describe","price","qq","lab"];
 let dic2 = ["描述：","价格:￥","卖家QQ:","类别:"];
 let trans = {"other":"其他","life":"生活用品","study":"学习用品","transport":"交通工具"};
 var nowlab = "null";
+
 function refresh()
 {
     var items = document.getElementsByClassName("item");

@@ -15,7 +15,7 @@ body {
 .container {
     background-color: #fff;
     border-radius: 20px;
-    padding: 200px; /* 调整容器内边距 */
+    padding: 150px; /* 调整容器内边距 */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 

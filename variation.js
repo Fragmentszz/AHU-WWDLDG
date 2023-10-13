@@ -56,7 +56,7 @@ let insert_g_dic = {
     "object" : "\"WWDLDG\".goods",
     "restriction":""
 }
-var numcount = {"c":0,"s":0,"f":0,"g":0,"o":0};
+var numcount = {"c":0,"s":0,"f":0,"g":0,"o":0,"img":0};
 
 function getdic(action,table)
 {

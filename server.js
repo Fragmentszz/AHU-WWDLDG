@@ -11,9 +11,11 @@ const server = exp();
 const register = require('./register.js');
 const login = require('./login.js');
 const ShoppingCart = require('./ShoppingCart.js');
-
+const ReleaseGoods = require('./RealeaseGoods.js');
+const store_img = require('./store_img.js');
 
 const cors = require('cors');
+const { toId } = require('./Tools.js');
 
 var numcount = vr.numcount;
 server.use(session({
@@ -29,13 +31,14 @@ server.use(session({
 server.use(exp.static('./html'));
 server.use(showgoods);
 server.use(ShoppingCart);
+server.use(store_img);
 server.get('/',(req,res) => {
     let html1 = fs.readFileSync('./html/newlogin.html');
     res.set('Content-Type', 'text/html; charset=utf-8');
     res.write(html1);
     res.end();
 });
-
+server.use(ReleaseGoods);
 /*登陆响应*/
 server.use(login);
 //注册
@@ -62,9 +65,27 @@ server.listen(port,() =>{
                 return;
             }
             numcount[list[i]] = dbres.rowCount;
-            console.log(numcount[list[i]]);
+            console.log(list2[i],dbres.rowCount);
         });
     }
+    function readnext(i){
+        fs.readdir('./html/img/',(err,files) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            const filePath ="img" + toId(i);
+            const match = files.filter(file => file.startsWith(filePath));
+            if(match.length === 0){
+                vr.numcount["img"] = i-1;
+                console.log("img",i-1);
+                return;
+            }else{
+                readnext(i+1);
+            }
+        });
+    }
+    readnext(1);
 })
 
 

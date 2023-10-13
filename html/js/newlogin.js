@@ -17,10 +17,18 @@ function login() {
             }else if(response["error_code"] === 2){
                 alert("密码错误！");
             }else{
-                var xhr2 = new XMLHttpRequest();
-                xhr2.open("POST","/GetOid",false);
-                xhr2.onload = function(){window.location.href = "/home_customers.html";};
-                xhr2.send("");
+                
+                if(response["uid"][0] === 'c'){
+                    var xhr2 = new XMLHttpRequest();
+                    xhr2.open("POST","/GetOid",false);
+                    xhr2.onload = function(){
+                        ;
+                    };
+                    xhr2.send("");
+                    window.location.href = '/home_customers.html';
+                }else if(response["uid"][0] === 's'){
+                    window.location.href = '/home_sellers.html';
+                }
             }
         } else {
             // 请求失败，处理错误
