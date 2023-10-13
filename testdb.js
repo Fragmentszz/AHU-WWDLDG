@@ -26,15 +26,6 @@ let Runsql = function(sql)
     return sqlrunning.result;
 }
 
-// sql = "select *\nfrom \"WWDLDG\".customer";
-// pool.query(sql,(err,dbres) => {
-//     if(err){
-//         console.log(err);
-//         return;
-//     }
-//     console.log(dbres);
-//     return;
-//  });
 module.exports = {
     Runsql:Runsql,
     dbpool:pool
