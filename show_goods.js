@@ -77,7 +77,7 @@ server.post('/search_goods_byNames',(req,res) =>{
     req.on('data', chunk=>{
         body.ori += chunk;
     });   
-    req.on('end',()=>{
+    req.on('end',() => {
         body.dic = JSON.parse(body.ori);
         var sqldic = {...vr.select_g_dic,"attribute":["gid"],"equal":{}};
         sqldic["object"] = "\"WWDLDG\".goods";
@@ -91,7 +91,7 @@ server.post('/search_goods_byNames',(req,res) =>{
             sqldic["restriction"] = "\nOrder BY price " + body.dic["restriction"];
         }
         let sql = toSQL.toSelect(sqldic);
-        console.log(sql);
+        //console.log(sql);
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
                 console.log(err);
@@ -108,4 +108,35 @@ server.post('/search_goods_byNames',(req,res) =>{
         });
     })
 });
+
+server.post('/addintoSC',(req,res) => {
+    var oid = req.session.oid;
+    if(typeof oid === 'undefined'){
+        res.send({"status":-1,"describe":"未登录或者需要重新登陆"});
+        return;
+    }
+    body = {ori:""};
+    req.on('data', chunk=>{
+        body.ori += chunk;
+    });
+    req.on('end',() =>{
+        let oridic = JSON.parse(body.ori);
+        gid = oridic["gid"];
+        sqldic = {...vr.getdic("insert","og"),"equal":{"oid":oid,"gid":gid,"count":1}};
+        var sql = toSQL.tosql(sqldic);
+        console.log(sql);
+        db.dbpool.query(sql,(err,dbres) =>{
+            if(err){
+                console.log(err);
+                if(err["code"] === '23505')   res.send({"status":1,"describe":"商品已在购物车中"});
+                else{
+                    res.send({"status":-2,"describe":"数据库错误.."});
+                }
+                return;
+            }
+            res.send({"status":0,"describe":"商品添加成功!"});
+        })
+    })
+})
+
 module.exports= server;

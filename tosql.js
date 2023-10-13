@@ -46,9 +46,8 @@ let toSelect = function(dic)
 
 let toInsert = function(dic)
 {
-    action = dic["action"]
+    action = dic["action"];
     if(action === 'insert'){
-        
         let {object,equal} = dic;
         res = 'insert';
         res += '\ninto ' + object + '\nValues\n(';
@@ -95,8 +94,72 @@ let toRegister = function(type,body,numcount)
     }
     return sqldic;
 }
-
-
+let tosql = function(sqldic)
+{
+    var act = sqldic["action"];
+    if(act == "select"){
+        return toSelect(sqldic);
+    }else if(act == "insert"){
+        return toInsert(sqldic);
+    }else if(act == "update"){
+        return toUpdate(sqldic);
+    }else if(act == "delete"){
+        return toDelete(sqldic);
+    }
+    return "";
+}
+let getequal = function(equal)
+{
+    res = "";
+    keys = Object.keys(equal);
+    if(keys.length == 0){
+        return res;
+    }
+    tmp = "";
+    for(let i = 0;i<keys.length - 1;i++){
+        if(keys[i] === 'connection'){
+            res += equal[keys[i]] + ' and ';
+        }else if(keys[i].indexOf("IN") != -1 || keys[i].indexOf("LIKE") != -1){
+            res += equal[keys[i]] + ' and ';
+        }else if(typeof(equal[keys[i]]) === 'string'){
+            res += keys[i] + '=' + '\'' + equal[keys[i]] + '\'' + ' and ';
+        }else {
+            res += keys[i] + '=' + equal[keys[i]] + ' and ';
+        }
+    }
+    if(keys[keys.length - 1] === 'connection' || keys[keys.length - 1].indexOf("IN") != -1 || keys[keys.length - 1].indexOf("LIKE") != -1){
+        res += equal[keys[keys.length - 1]];
+    }else if(typeof(equal[keys[keys.length - 1]]) === 'string'){
+        res += keys[keys.length - 1] + '=' + '\'' + equal[keys[keys.length - 1]] + '\'';
+    }else {
+        res += keys[keys.length - 1] + '=' + equal[keys[keys.length - 1]];
+    }
+    return res;
+}
+let toUpdate = function(dic)
+{
+    let {object,set,equal} = dic;
+    res = 'update ';
+    res += object;
+    res += "\nset\n";
+    res += getequal(set);
+    keys = Object.keys(equal);
+    if(keys.length == 0){
+        return res;
+    }
+    res += '\nwhere\n';
+    res += getequal(equal);
+    return res;    
+}
+let toDelete = function(dic)
+{
+    let {object,equal} = dic;
+    res = 'delete ';
+    res += '\nfrom ' + object;
+    res += '\nwhere\n'
+    res += getequal(equal);
+    return res;
+}
 module.exports = {
-    toSelect,toInsert,toRegister
+    toSelect,toInsert,toRegister,toUpdate,tosql
 };

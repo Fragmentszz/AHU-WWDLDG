@@ -1,70 +1,75 @@
-<html>
-
-    <head>
-
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <link href="/css/ShoppingCart.css" rel = "stylesheet">
+</head>
 <body>
-    <div id="d1">
-        <p id="p1">Hello World!</p>
-        <h3 id="h31">en?</h3>
-    </div>
-    <div id="container">
-
-    </div>
-    <div>
-        <button id="aa" onClick="create()">
-            "点一下试试"
-        </button>
-    </div>
-    <div class="item" data-category="其他" data-price="80" gid = "">
-        <h3>物品名称: 二手瑜伽垫</h3>
-        <p class = "describe">描述: Liforme瑜伽垫，环保材料。</p>
-        <p class = "price">价格: $80</p>
-        <p class = "contact">联系卖家: 卖家姓名</p>
-        <p class="category-label">分类: 其他</p>
-        <button class="buy-button">购买</button>
-    </div>
-
+    <header>
+        <h1>购物车</h1>
+    </header>
+    <main>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>商品</th>
+                    <th>价格</th>
+                    <th>数量</th>
+                    <th>分类</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id = "tbody">
+                <tr class="cart-item">
+                    <td><input type="checkbox" class="item-checkbox"></td>
+                    <td>WWD纪念T-shirt</td>
+                    <td>￥168.00</td>
+                    <td>
+                        <button class="quantity-button decrement-button">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-button increment-button">+</button>
+                    </td>
+                    <td>生活用品</td>
+                    <td><button class="remove-button">删除</button></td>
+                </tr>
+                <tr class="cart-item">
+                    <td><input type="checkbox" class="item-checkbox"></td>
+                    <td>二手电动车</td>
+                    <td>￥1800</td>
+                    <td>
+                        <button class="quantity-button decrement-button">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-button increment-button">+</button>
+                    </td>
+                    <td>交通工具</td>
+                    <td><button class="remove-button">删除</button></td>
+                </tr>
+                <tr class="cart-item">
+                    <td><input type="checkbox" class="item-checkbox"></td>
+                    <td>二手雪碧</td>
+                    <td>￥2</td>
+                    <td>
+                        <button class="quantity-button decrement-button">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-button increment-button">+</button>
+                    </td>
+                    <td>其他</td>
+                    <td><button class="remove-button">删除</button></td>
+                </tr>
+                <!-- 其他商品行 -->
+            </tbody>
+        </table>
+        <div class="cart-summary">
+            <p>总价: ￥<span id="total-price">0.00</span></p>
+            <button id="checkout-button">结算</button>
+        </div>
+        <div>
+            <button id="create">hello</button>
+        </div>
+    </main>
+    <script src="/html_learning/try.js"></script>
 </body>
-<script>
-    let nowgoods = 0;
-    let gids = [];
-    let dic = ["describe","price","contact","category-label"];
-    function toString(num)
-    {
-        var res = "";
-        do{
-            res = String.fromCharCode(num % 10 + 48) + res;
-            num = parseInt(num / 10);
-        }while(num > 0)
-        return res;
-    }
-    function callback() 
-    {
-        var e1 = document.getElementById("d1").firstElementChild;
-        alert(e1.nextElementSibling.innerText);
-        
-    }
-    function create()
-        {
-            alert(nowgoods);
-            var index = "item" + toString(nowgoods)
-            var div = document.createElement("div");
-            var p;
-            p = document.createElement("img");
-            p.src = "./background.jpg";
-            div.appendChild(p);
-            // for(i=0;i<4;i++)
-            // {
-            //     p = document.createElement('p');
-            //     p.id = index + '_' + dic[i];p.class = dic[i];p.innerHTML = nowgoods;
-            //     //p.gid = gids[nowgoods];
-            //     div.appendChild(p);
-            // }
-            // p = document.createElement("button");p.id = index + '_' + 'button';p.class = "buy-button";
-            // div.append(p);
-            document.getElementById("container").appendChild(div);
-            // nowgoods++;
-        }
-</script>
 </html>
