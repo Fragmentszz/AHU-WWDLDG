@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>递送员页面</title>
+  <link href="css/Forward.css" rel = "stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>递送员页面</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>运送单号</th>
+          <th>目的地址</th>
+          <th>报酬</th>
+        </tr>
+      </thead>
+      <tbody id="delivery-list">
+        <!-- 这里将动态添加递送单号、目的地址和报酬的行 -->
+      </tbody>
+    </table>
+    <div class="btn-container">
+      <button class="btn" onclick="submitRequest()">提交请求</button>
+    </div>
+  </div>
+
+  <script src="js/Forward.js"></script>
+</body>
+</html>

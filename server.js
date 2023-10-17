@@ -13,9 +13,10 @@ const login = require('./login.js');
 const ShoppingCart = require('./ShoppingCart.js');
 const ReleaseGoods = require('./RealeaseGoods.js');
 const store_img = require('./store_img.js');
-
+const Profile = require('./Profile.js');
 const cors = require('cors');
 const { toId } = require('./Tools.js');
+const Forward = require('./Forward.js');
 
 var numcount = vr.numcount;
 server.use(session({
@@ -28,10 +29,26 @@ server.use(session({
         maxAge:1000*60*5
     }
 }))
+let sessionmiddle = function(req,res,next)
+{
+    if(req.path === '/' || req.path.indexOf('login') != -1 || req.path.indexOf('register') != -1){
+        next();
+    }else{
+        if(typeof req.session.uid === 'undefined'){
+            res.statusCode = 500;
+            res.send({"status":-2,"describe" :"您未登录或需要重新登陆!"});
+        }else{
+            next();
+        }
+    }
+}
 server.use(exp.static('./html'));
+server.use(sessionmiddle);
 server.use(showgoods);
 server.use(ShoppingCart);
 server.use(store_img);
+server.use(Profile);
+server.use(Forward);
 server.get('/',(req,res) => {
     let html1 = fs.readFileSync('./html/newlogin.html');
     res.set('Content-Type', 'text/html; charset=utf-8');
@@ -52,22 +69,35 @@ server.all('*',(req,res) => {
 var port = 80;
 // var numcount = {"c":0,"s":0,"f":0,"g":0,"o":0};
 server.listen(port,() =>{
-    let list = ["c","s","f","g","o"];
-    let list2 = ["customer","seller","forwarder","goods","orders"];
+    let list = ["c","s","f","g","o","ts"];
+    let list2 = ["customer","seller","forwarder","goods","orders","trans"];
     console.log("服务启动了>..");
     for(let i=0;i<list.length;i++)
     {
         var sqldic = {...vr.getdic("select",list2[i]),"attribute":["*"],"equal":{}};
+        sqldic["restriction"] = "\nORDER BY " +  list[i] + "id DESC";
+        console.log(toSQL.toSelect(sqldic));
         db.dbpool.query(toSQL.toSelect(sqldic),(err,dbres) => {
             if(err){
                 console.log(err);
                 console.log("连接数据库失败...");
                 return;
             }
-            numcount[list[i]] = dbres.rowCount;
-            console.log(list2[i],dbres.rowCount);
+            //console.log(dbres["rows"][0]);
+            if(typeof dbres["rows"][0] === 'undefined'){
+                numcount[list[i]] = 0;
+            }
+            else   {
+                let str = "";
+                if(list[i] != 'ts') str = dbres["rows"][0][list[i] + "id"].slice(1);
+                else str = dbres["rows"][0][list[i] + "id"].slice(2);
+                numcount[list[i]] = parseInt(str);
+            }
+            console.log(list2[i],numcount[list[i]]);
         });
     }
+
+    //图片
     function readnext(i){
         fs.readdir('./html/img/',(err,files) => {
             if(err){

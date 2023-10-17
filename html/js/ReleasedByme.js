@@ -5,12 +5,7 @@ let dic = ["describe","price","qq","lab"];
 let dic2 = ["描述：","价格:￥","卖家QQ:","类别:"];
 let trans = {"other":"其他","life":"生活用品","study":"学习用品","transport":"交通工具"};
 var nowlab = "null";
-let exit = function(xhr)
-{
-    var result = JSON.parse(xhr.responseText);
-    alert(result["describe"]);
-    window.parent.postMessage('relogin','*');
-}
+
 function refresh()
 {
     var items = document.getElementsByClassName("item");
@@ -24,10 +19,7 @@ function refresh()
 }
 document.addEventListener("DOMContentLoaded", function() {
     getGids(document.getElementById("allgoods"));
-    document.getElementById("searchbutton").addEventListener("click",searchItems);
 });
-
-
 window.onscroll = function() {
         // 判断是否滚动到页面底部
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -42,15 +34,15 @@ window.onscroll = function() {
             }
         }
 };
-
 function getGids(button)
 {
     let attr = button.getAttribute("attr");
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/show_goods", false);
     xhr.onload = function() {
+        var response = JSON.parse(xhr.responseText);
         if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
+            
             gids = response["gids"];
             console.log(gids.length);
             nowlab = attr;
@@ -58,11 +50,13 @@ function getGids(button)
             refresh();
             over = 0;
         } else {
-            exit(xhr);
+            alert(response["describe"]);
+            window.parent.postMessage('relogin','*');
         }
     };
     var requestData = {
-        "attr":attr
+        "attr":attr,
+        "sid":"yes"
     };
     // 将数据转换为JSON格式
     var jsonRequestData = JSON.stringify(requestData);
@@ -74,15 +68,16 @@ function search_goods(sqldic)
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/search_goods_byNames", false);
     xhr.onload = function() {
+        var response = JSON.parse(xhr.responseText);
         if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
             gids = response["gids"];
-            // console.log(gids.length);
+            console.log(gids.length);
             nowid = 0;
             refresh();
             over = 0;
         } else {
-            exit(xhr);
+            alert(response["describe"]);
+            window.parent.postMessage('relogin','*');
         }
     };
     // 将数据转换为JSON格式
@@ -102,13 +97,18 @@ function toString(num)
 function Post(id)
 {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/addintoSC", false);
+    xhr.open("POST", "/deleteFromGoods", false);
     xhr.onload = function() {
+        var result = JSON.parse(xhr.responseText);
         if(xhr.status == 200){
-            var result = JSON.parse(xhr.responseText);
+            if(result["status"] === 0){
+                var t = document.getElementById("item" + toString(id));
+                t.parentElement.removeChild(t);
+            }
             alert(result["describe"]);
-        }else{
-            alert("未知错误..");
+        }else if(xhr.status === 500){
+            alert(result["describe"]);
+            window.parent.postMessage('relogin','*');
         }
     }
     var requestData = {
@@ -154,16 +154,17 @@ function create(nowgoods)
                 Post(nowgoods);
                 console.log(nowgoods);
             });
-            p.innerText = "加入购物车";
+            p.innerText = "下架";
             div.appendChild(p);
             let p2 = document.createElement("img");
             p2.src = result["img"];
             p2.className = "item_img";
             div2.appendChild(p2);
             div2.appendChild(div);
+            div2.id = index;
             document.getElementById("items").appendChild(div2);
         } else {
-            exit(xhr);
+            return;
         }
     };
     var requestData = {
@@ -173,19 +174,4 @@ function create(nowgoods)
     var jsonRequestData = JSON.stringify(requestData);
     // 发送请求
     xhr.send(jsonRequestData);
-}
-
-
-function searchItems() 
-{
-    const searchInput = document.getElementById('search-input').value;
-    const order = document.getElementById('sort-select').value;
-    let sqldic = {"lab":nowlab,"gname":"","restriction":""};
-    if(searchInput != ""){
-        sqldic["gname"] = searchInput;
-    }
-    if(order != 'random'){
-        sqldic["restriction"] = order;
-    }
-    search_goods(sqldic);
 }

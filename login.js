@@ -5,7 +5,6 @@ const toSQL = require('./tosql');
 const TIME = require('./Time');
 /*登陆响应*/
 server.post('/login_c',(req,res) => {
-    
     var body = {ori:"",dic:{}};
     req.on('data', chunk=>{
         body.ori += chunk;
@@ -15,13 +14,14 @@ server.post('/login_c',(req,res) => {
         console.log(body.ori);
         body.dic = JSON.parse(body.ori);
         sqldic = {...vr.login_dic,"attribute":["uid","pswrd"],"equal":{"username":body.dic["username"]}};
-        let sql = toSQL.toSelect(sqldic);
-        console.log(sql);
+        console.log(sqldic);
+        let sql = toSQL.tosql(sqldic);
+        console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
                 console.log(err);
                 res.statusCode = 500;
-                res.send('DataBase ERROR');
+                res.send({"describe":'DataBase ERROR'});
                 return;
             }
             if(dbres.rowCount == 0) res.send({"error_code" :1,"uid" : ""});

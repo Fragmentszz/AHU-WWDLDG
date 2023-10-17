@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>递送员页面</title>
+  <link href="css/Mytrans.css" rel = "stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>递送员页面</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>运送单号</th>
+          <th>目的地址</th>
+          <th>开始时间</th>
+          <th>报酬</th>
+        </tr>
+      </thead>
+      <tbody id="delivery-list">
+        <!-- 这里将动态添加递送单号、目的地址、开始时间和报酬的行 -->
+        <!-- 可以根据实际情况添加更多的递送任务行 -->
+      </tbody>
+    </table>
+    <div class="btn-container">
+      <button class="btn" id="completeButton">完成</button>
+      <button class="btn" id="abandonButton">放弃</button>
+    </div>
+  </div>
+  <script src="js/Mytrans.js"></script>
+</body>
+</html>

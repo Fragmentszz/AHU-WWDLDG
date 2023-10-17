@@ -1,6 +1,33 @@
 const vr  = require('./variation');
 const Tools = require('./Tools');
 
+let getequal = function(equal,flag)
+{
+    res = "";
+    keys = Object.keys(equal);
+    if(keys.length == 0){
+        return res;
+    }
+    var t = "";
+    if(flag == 1) t = ' and ';
+    else if(flag == 2)  t = ' , ';
+    for(let i = 0;i<keys.length;i++){
+        if(keys[i] === 'connection'){
+            res += equal[keys[i]];
+        }else if(keys[i].indexOf("FUNCION") != -1  || keys[i].indexOf("IN") != -1 || keys[i].indexOf("LIKE") != -1){
+            res += equal[keys[i]];
+        }else if(typeof(equal[keys[i]]) === 'string' && equal[keys[i]] != "NOW()" ){
+            res += keys[i] + '=' + '\'' + equal[keys[i]] + '\'';
+        }else {
+            res += keys[i] + '=' + equal[keys[i]];
+        }
+        if(i < keys.length - 1){
+            res += t;
+        }
+    }
+    return res;
+}
+
 let toSelect = function(dic)
 {
     action = dic["action"]
@@ -19,30 +46,11 @@ let toSelect = function(dic)
             return res;
         }
         res += '\nwhere\n';
-        tmp = "";
-        for(let i = 0;i<keys.length - 1;i++){
-            if(keys[i] === 'connection'){
-                res += equal[keys[i]] + ' and ';
-            }else if(keys[i].indexOf("IN") != -1 || keys[i].indexOf("LIKE") != -1){
-                res += equal[keys[i]] + ' and ';
-            }else if(typeof(equal[keys[i]]) === 'string'){
-                res += keys[i] + '=' + '\'' + equal[keys[i]] + '\'' + ' and ';
-            }else {
-                res += keys[i] + '=' + equal[keys[i]] + ' and ';
-            }
-        }
-        if(keys[keys.length - 1] === 'connection' || keys[keys.length - 1].indexOf("IN") != -1 || keys[keys.length - 1].indexOf("LIKE") != -1){
-            res += equal[keys[keys.length - 1]];
-        }else if(typeof(equal[keys[keys.length - 1]]) === 'string'){
-            res += keys[keys.length - 1] + '=' + '\'' + equal[keys[keys.length - 1]] + '\'';
-        }else {
-            res += keys[keys.length - 1] + '=' + equal[keys[keys.length - 1]];
-        }
+        res += getequal(equal,1);
         res += restriction;
         return res;
     }
 }
-
 
 let toInsert = function(dic)
 {
@@ -108,47 +116,16 @@ let tosql = function(sqldic)
     }
     return "";
 }
-let getequal = function(equal)
-{
-    res = "";
-    keys = Object.keys(equal);
-    if(keys.length == 0){
-        return res;
-    }
-    tmp = "";
-    for(let i = 0;i<keys.length - 1;i++){
-        if(keys[i] === 'connection'){
-            res += equal[keys[i]] + ' and ';
-        }else if(keys[i].indexOf("IN") != -1 || keys[i].indexOf("LIKE") != -1){
-            res += equal[keys[i]] + ' and ';
-        }else if(typeof(equal[keys[i]]) === 'string'){
-            res += keys[i] + '=' + '\'' + equal[keys[i]] + '\'' + ' and ';
-        }else {
-            res += keys[i] + '=' + equal[keys[i]] + ' and ';
-        }
-    }
-    if(keys[keys.length - 1] === 'connection' || keys[keys.length - 1].indexOf("IN") != -1 || keys[keys.length - 1].indexOf("LIKE") != -1){
-        res += equal[keys[keys.length - 1]];
-    }else if(typeof(equal[keys[keys.length - 1]]) === 'string'){
-        res += keys[keys.length - 1] + '=' + '\'' + equal[keys[keys.length - 1]] + '\'';
-    }else {
-        res += keys[keys.length - 1] + '=' + equal[keys[keys.length - 1]];
-    }
-    return res;
-}
+
 let toUpdate = function(dic)
 {
     let {object,set,equal} = dic;
     res = 'update ';
     res += object;
     res += "\nset\n";
-    res += getequal(set);
-    keys = Object.keys(equal);
-    if(keys.length == 0){
-        return res;
-    }
+    res += getequal(set,2);
     res += '\nwhere\n';
-    res += getequal(equal);
+    res += getequal(equal,1);
     return res;    
 }
 let toDelete = function(dic)
@@ -157,9 +134,14 @@ let toDelete = function(dic)
     res = 'delete ';
     res += '\nfrom ' + object;
     res += '\nwhere\n'
-    res += getequal(equal);
+    res += getequal(equal,1);
+    res += dic["restriction"];
     return res;
 }
+t = getequal(
+    {"FUNCION1":"totcost = totcost + " + 1.0,"FUNCION2":"credit = credit + 1"},2
+);
+console.log(t);
 module.exports = {
     toSelect,toInsert,toRegister,toUpdate,tosql
 };

@@ -48,6 +48,9 @@ let addListener =  function() {
     const decrementButtons = document.querySelectorAll('.decrement-button');
     const quantitySpans = document.querySelectorAll('.quantity');
 
+
+    checkoutButton.addEventListener('click',checkout);
+
     // 删除商品项
     removeButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
@@ -118,9 +121,10 @@ function createtd1(tr)
 }
 let refresh = function() {
     var items = document.getElementsByClassName("cart-item");
-    for (let i = items.length - 1; i >= 0; i--) {
-        items[i].parentNode.removeChild(items[i]);
+    for(let i=items.length - 1;i >= 0;i--){
+        items[i].parentElement.removeChild(items[i]);
     }
+    
     if (gids.length == 0) {
         alert("没物品啦!!");
         refreshtot();
@@ -166,7 +170,8 @@ let create = function(id)
         if (xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
             var td = document.createElement('td');
-            td.innerHTML = "<input type=\"checkbox\" class=\"item-checkbox\">"
+            td.className = "detd";
+            td.innerHTML = "<input type=\"checkbox\" class=\"item-checkbox\" id = \"" +  "de" + id +"\">";
             tr.appendChild(td);
             for(let i=0;i<dic.length;i++){
                 td = document.createElement('td');
@@ -176,13 +181,15 @@ let create = function(id)
                 tr.appendChild(td);
             }
             td = document.createElement('td');
-            td.innerHTML = `<button class="quantity-button decrement-button" id=\"` +  id +`\">-</button>
-                                 <span class="quantity" id="` + "quantity_" + id + `">` + num[id] + `</span>
-                                 <button class="quantity-button increment-button" id=\"` + id +`\">+</button>
+            td.innerHTML = `<button class="quantity-button decrement-button" id=\"` +  "de" + id +`\">-</button>
+                                 <span class="quantity" id="` + "quantity_"  +  "de" + id + `">`+ num[id] + `</span>
+                                 <button class="quantity-button increment-button" id=\"` +  "de" + id +`\">+</button>
                              `
+            td.className = "detd";
             tr.appendChild(td);
             td = document.createElement('td');
-            td.innerHTML = `<button class="remove-button"  id="` + id + `">删除</button>`;
+            td.innerHTML = `<button class="remove-button"  id="` +  "de" + id + `">删除</button>`;
+            td.className = "detd";
             tr.appendChild(td);
             tbody.append(tr);
             price[id] = response["price"];
@@ -198,4 +205,48 @@ let create = function(id)
     };
     var jsonRequestData = JSON.stringify(requestData);
     xhr.send(jsonRequestData);
+}
+
+let POST = function(url,dic,callback,params)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, false);
+    xhr.onload = function()
+    {
+        callback(xhr,params);
+    }
+    var jsonRequestData = JSON.stringify(dic);
+    xhr.send(jsonRequestData);
+}
+
+let checkout = function()
+{
+    var addressInput = document.getElementById("address");
+    var address = addressInput.value.trim();
+    var pay = document.getElementById("pay").value.trim();
+    dic = {
+        "toaddress":address,
+        "pay":parseFloat(pay),
+        "gids":gids,
+        "enable":enable
+    };
+    console.log(dic);
+    if( address === ""){
+        alert("请输入您的地址！");
+        return;
+    }
+    let callback = function(xhr,params){
+        var response = JSON.parse(xhr.responseText);
+        if(xhr.status === 200){
+            alert(response["describe"]);
+            POST('/GetOid',{},()=>{
+                getGids();
+            },null);
+        }else{
+            alert("请重新登陆");
+            window.parent.postMessage('relogin','*');
+        }
+    };
+    
+    POST("/checkoutOrder",dic,callback,{});
 }

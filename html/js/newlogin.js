@@ -11,13 +11,11 @@ function login() {
         if (xhr.status === 200) {
             // 请求成功，处理响应数据
             var response = JSON.parse(xhr.responseText);
-            //document.getElementById("response").innerHTML = "响应数据: " + JSON.stringify(response);
             if(response["error_code"] === 1){
                 alert("找不到用户");
             }else if(response["error_code"] === 2){
                 alert("密码错误！");
             }else{
-                
                 if(response["uid"][0] === 'c'){
                     var xhr2 = new XMLHttpRequest();
                     xhr2.open("POST","/GetOid",false);
@@ -28,6 +26,8 @@ function login() {
                     window.location.href = '/home_customers.html';
                 }else if(response["uid"][0] === 's'){
                     window.location.href = '/home_sellers.html';
+                }else if(response["uid"][0] === 'f'){
+                    window.location.href = '/home_forwarder.html';
                 }
             }
         } else {

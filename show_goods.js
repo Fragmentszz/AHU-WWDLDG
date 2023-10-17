@@ -24,11 +24,14 @@ server.post('/show_goods',(req,res) =>{
         body.dic = JSON.parse(body.ori);
         attr = body.dic["attr"];
         let sqldic = {...vr.select_g_dic,"attribute":["gid"],"equal":{}};
-        if(attr != "null"){
+        if(attr != "null" && attr != "my"){
             sqldic["equal"] = {"lab":attr};
         }
+        if(typeof body.dic["sid"] != "undefined"){
+            sqldic["equal"]["sid"] = req.session.uid;
+        }
         let sql = toSQL.toSelect(sqldic);
-        //console.log(sql);
+        console.log(sql,'\n');
         let result = {"code":0,"gids": new Array()};
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
@@ -56,10 +59,10 @@ server.post('/select_goods',(req,res) => {
     req.on('end',()=>{
         body.dic = JSON.parse(body.ori);
         let gid = body.dic["gid"];
-        let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".goods.sid = \"WWDLDG\".seller.sid"}};
-        sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".seller";
+        let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".registermsg.uid = \"WWDLDG\".goods.sid"}};
+        sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".registermsg";
         let sql = toSQL.toSelect(sqldic);
-        //console.log(sql);
+        //console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
                 console.log(err);
@@ -76,7 +79,7 @@ server.post('/search_goods_byNames',(req,res) =>{
     var body = {ori:"",dic:{}};
     req.on('data', chunk=>{
         body.ori += chunk;
-    });   
+    });
     req.on('end',() => {
         body.dic = JSON.parse(body.ori);
         var sqldic = {...vr.select_g_dic,"attribute":["gid"],"equal":{}};
@@ -91,7 +94,7 @@ server.post('/search_goods_byNames',(req,res) =>{
             sqldic["restriction"] = "\nOrder BY price " + body.dic["restriction"];
         }
         let sql = toSQL.toSelect(sqldic);
-        //console.log(sql);
+        console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) => {
             if(err){
                 console.log(err);
@@ -112,7 +115,7 @@ server.post('/search_goods_byNames',(req,res) =>{
 server.post('/addintoSC',(req,res) => {
     var oid = req.session.oid;
     if(typeof oid === 'undefined'){
-        res.send({"status":-1,"describe":"未登录或者需要重新登陆"});
+        res.send({"status":-1,"describe":"您是个卖家哦~请登录买家账号购买物品~"});
         return;
     }
     body = {ori:""};
@@ -124,7 +127,7 @@ server.post('/addintoSC',(req,res) => {
         gid = oridic["gid"];
         sqldic = {...vr.getdic("insert","og"),"equal":{"oid":oid,"gid":gid,"count":1}};
         var sql = toSQL.tosql(sqldic);
-        console.log(sql);
+        console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) =>{
             if(err){
                 console.log(err);
@@ -138,5 +141,38 @@ server.post('/addintoSC',(req,res) => {
         })
     })
 })
+
+server.post('/deleteFromGoods',(req,res) => {
+    var sid = req.session.uid;
+    if(typeof sid === 'undefined'){
+        res.send({"status":-1,"describe":"未登录或者需要重新登陆"});
+        return;
+    }
+    body = {ori:""};
+    req.on('data', chunk=>{
+        body.ori += chunk;
+    });
+    req.on('end',() =>{
+        let oridic = JSON.parse(body.ori);
+        gid = oridic["gid"];
+        sqldic = {...vr.getdic("delete","goods"),"equal":{"sid":sid,"gid":gid}};
+        //sqldic["restriction"] = "\nCASCADE";
+        var sql = toSQL.tosql(sqldic);
+        console.log(sql,'\n');
+        db.dbpool.query(sql,(err,dbres) =>{
+            if(err){
+                console.log(err);
+                if(err["code"] === '23503')   res.send({"status":1,"describe":"商品已在购物车中，无法下架"});
+                else{
+                    res.send({"status":-2,"describe":"数据库错误.."});
+                }
+                return;
+            }
+            res.send({"status":0,"describe":"商品下架成功"});
+        })
+        //res.send("hi");
+    })
+})
+
 
 module.exports= server;

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+  <link rel="stylesheet" href="css/UpdateUser.css">
+</head>
+
+<body>
+  <h1>User Profile</h1>
+
+  <form id="profileForm">
+    <label for="uid">UID:</label>
+    <input type="text"  class="readonly-input" id="uid" name="uid" readonly><br>
+    <label for="uid">总报酬:</label>
+    <input type="text"  class="readonly-input" id="totcost" name="totcost" readonly><br>
+    <label for="uid">信誉分:</label>
+    <input type="text"  class="readonly-input" id="credit" name="credit" readonly><br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <label for="password">Password:</label>
+    <input type="password" id="pswrd" name="pswrd"><br>
+    <input type="checkbox" onclick="togglePasswordVisibility()">显示密码
+
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" name="phone"><br>
+
+    <label for="qq">QQ:</label>
+    <input type="text" id="qq" name="qq"><br>
+
+    <button type="submit">Save</button>
+  </form>
+
+  <script src="js/UpdateProfile_F.js"></script>
+  <script>
+    function togglePasswordVisibility() {
+      var passwordField = document.getElementById("pswrd");
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+      } else {
+        passwordField.type = "password";
+      }
+  }
+  </script>
+</body>
+</html>

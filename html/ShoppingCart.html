@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>购物车</title>
-    <link href="css/ShoppingCart.css" rel = "stylesheet">
+    <link href="css/ShoppingCart.css" rel="stylesheet">
 </head>
 <body>
     <header>
         <h1>购物车</h1>
     </header>
     <main>
-        <table class="cart-table">
+        
+        <table class="cart-table" id = "table">
             <thead>
                 <tr>
                     <th>选择</th>
@@ -22,10 +23,14 @@
                     <th>操作</th>
                 </tr>
             </thead>
-            <tbody id = "tbody">
+            <tbody id="tbody">
             </tbody>
         </table>
         <div class="cart-summary">
+            <label for="address">收货地址：</label>
+            <input type="text" id="address" name="address" required>
+            <label for="pay">运送报酬：￥</label>
+            <input type="text" id="pay" name="pay" required>
             <p>总价: ￥<span id="total-price">0.00</span></p>
             <button id="checkout-button">结算</button>
         </div>

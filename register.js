@@ -30,12 +30,11 @@ server.post('/register_c',(req,res) => {
                 if(err['code'] === '23505'){
                     res.send({"error_code" : 1,"uid" : ""});
                 }else{
-                    res.send({"error_code" : -1,"uid" : ""});
+                    res.send({"error_code" : -1,"uid" : "","describe":'DataBase ERROR'});
                 }
                 return;
             }else{
                 sqldic = toSQL.toRegister(type,body,numcount);
-                console.log(numcount);
                 sql = toSQL.toInsert(sqldic);
                 db.dbpool.query(sql,(err2,dbres2) => {
                     if(err2){
