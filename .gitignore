@@ -12,3 +12,4 @@ manually-test-on-heroku.js
 yarn.lock
 useless/
 html/img
+/log

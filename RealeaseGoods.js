@@ -33,6 +33,7 @@ server.post('/ReleaseGoods',(req,res) =>{
                 return;
             }
             vr.numcount["g"] += 1;
+            Tools.log(uid + ' ' + '发布了物品:' + gid + ' ' + oridic["gname"]);
             res.send({"status":0,"describe":"物品上架成功~~"});
         });
     });

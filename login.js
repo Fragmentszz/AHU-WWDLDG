@@ -3,6 +3,7 @@ const db = require('./testdb');
 const vr = require('./variation');
 const toSQL = require('./tosql');
 const TIME = require('./Time');
+const Tools = require('./Tools');
 /*登陆响应*/
 server.post('/login_c',(req,res) => {
     var body = {ori:"",dic:{}};
@@ -27,7 +28,7 @@ server.post('/login_c',(req,res) => {
             if(dbres.rowCount == 0) res.send({"error_code" :1,"uid" : ""});
             else{
                 if(dbres.rows[0].pswrd === body.dic["pswrd"]){
-                    console.log(dbres.rows[0].uid,body.dic["username"],TIME(),'登陆');
+                    Tools.log(dbres.rows[0].uid + ' ' + body.dic["username"] + '登陆');
                     req.session.uid = dbres.rows[0].uid;
                     res.send({"error_code" :0,"uid" : dbres.rows[0].uid});
                 }else {

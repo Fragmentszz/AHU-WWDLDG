@@ -116,6 +116,14 @@ let tosql = function(sqldic)
     }
     return "";
 }
+dict = {
+    action:"select",                     //也可以是"insert"/"delete"/"update",
+    object:"customers",                   //操作表名/视图名
+    attribute:["*"],                    //---查询需要的属性列名
+    equal:{"uid":""},                 //---WHERE 子句中的内容
+    set:{"price":1.0},                   //---SET子句中的内容(Update)
+    restriction:""                          //限制语句,比如: Order BY price ASC 
+}
 
 let toUpdate = function(dic)
 {

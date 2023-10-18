@@ -48,6 +48,7 @@ server.post('/acceptTrans',(req,res) => {
                     vr.dberr(err,res);
                     return;
                 }
+                Tools.log("运单" + oridic["tsid"] + "被" + fid + "接受了");
                 vr.send(res,'0',"接受任务成功！！");
             });
         });
@@ -146,9 +147,11 @@ server.post('/OperateTrans',(req,res) => {
             }
             if(oridic["action"] === "complete") {
                 vr.send(res,'0',"任务成功！！报酬增加了" + pay.toString() + "元");
+                Tools.log("运单" + oridic["tsid"]  + "被" + fid + "完成了");
             }
             else if(oridic["action"] === "abandon") {
                 vr.send(res,'0',"取消任务成功！您的信誉分减少...");
+                Tools.log("运单" + oridic["tsid"]  + "被" + fid + "放弃了");
             }
         });
     });

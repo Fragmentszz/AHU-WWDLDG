@@ -202,6 +202,7 @@ server.post("/checkoutOrder",(req,res) => {
                 return;
             }
             response["status"] = 0;
+            Tools.log('订单' + oid + '被结算, 生成了' + tsid + '运送单');
             response["describe"] = "结算成功~~~\n总价是" + (totpay+oridic["pay"]).toString() + "元";
             res.send(response);
         });

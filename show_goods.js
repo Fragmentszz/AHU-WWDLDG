@@ -5,7 +5,7 @@ const db = require('./testdb');
 const toSQL = require('./tosql');
 const vr = require('./variation');
 const { select_g_dic } = require("./variation");
-
+const Tools = require('./Tools');
 server.get('/goods',(req,res) =>{
     if(req.session.uid){
         res.redirect('/goods_home.html');
@@ -168,6 +168,7 @@ server.post('/deleteFromGoods',(req,res) => {
                 }
                 return;
             }
+            Tools.log(gid + ' 被 ' + sid + ' 下架了');
             res.send({"status":0,"describe":"商品下架成功"});
         })
         //res.send("hi");

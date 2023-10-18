@@ -1,3 +1,4 @@
+const LOG = require('./log');
 let toJson = function(body)
 {
     key = "";
@@ -33,9 +34,12 @@ let toId = function(num)
     }
     return res;
 }
-
+let log = function(str)
+{
+    LOG(str);
+}
 module.exports = {
-    toJson,toId
+    toJson,toId,log
 };
 
 console.log(toId(100));

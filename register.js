@@ -44,7 +44,7 @@ server.post('/register_c',(req,res) => {
                         return;
                     }else{
                     numcount[type] = numcount[type] + 1;
-                    console.log("注册成功!!");
+                    Tools.log(type + Tools.toId(numcount[type]) + ' ' + '注册成功');
                     res.send({"error_code" :0,"uid" :type + Tools.toId(numcount[type]),"cnt":numcount[type]});    
                     }
                 });
