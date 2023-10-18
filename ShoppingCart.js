@@ -133,6 +133,9 @@ server.post("/checkoutOrder",(req,res) => {
         var sql = "";
         var response = vr.response;
         var hssend = 0;
+        sqldic = {...vr.getdic("update","orders"),"set":{"FUNCION":"price = 0"},"equal":{"oid":oid}};
+        console.log(toSelect.tosql(sqldic),'看这里');
+        db.dbpool.query(toSelect.tosql(sqldic));
         for(let i=0;i<gids.length && !hssend;i++){
             if(enable[i]){
                 hvgoods = 1;
@@ -148,6 +151,9 @@ server.post("/checkoutOrder",(req,res) => {
                         return;
                     }
                     totpay += dbres["rows"][0]["totprice"];
+                    sqldic = {...vr.getdic("update","orders"),"set":{"FUNCION":"price = price + " + dbres["rows"][0]["totprice"].toString()},"equal":{"oid":oid}};
+                    console.log(toSelect.tosql(sqldic),'看这里');
+                    db.dbpool.query(toSelect.tosql(sqldic));
                 });
             }else{
                 sqldic = {...vr.getdic("delete","og"),"equal":{"oid":oid,"gid":gids[i]}};
@@ -170,7 +176,21 @@ server.post("/checkoutOrder",(req,res) => {
             res.send(response);
             return;
         }
-        sqldic = {...vr.getdic("update","orders"),"set":{"price":totpay,"toaddress":toaddress,"otime":"NOW()"},"equal":{"oid":oid}};
+        
+        var tsid = "ts" + Tools.toId(vr.numcount['ts'] + 1);
+        sqldic = {...vr.getdic("insert","trans"),'equal':{"tsid":tsid,"oid":oid,"fid":null,"starttime":null,"endtime":null,
+                                                          "status":0,"pay":oridic["pay"]}
+        };
+        sql = toSelect.tosql(sqldic);
+        console.log(sql,'\n');
+        db.dbpool.query(sql,(err,dbres) =>{
+            if(err){
+                console.log(err);
+                return;
+            }
+            vr.numcount['ts'] += 1;
+        });
+        sqldic = {...vr.getdic("update","orders"),"set":{"toaddress":toaddress,"otime":"NOW()"},"equal":{"oid":oid}};
         sql = toSelect.tosql(sqldic);
         console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) => {
@@ -185,20 +205,6 @@ server.post("/checkoutOrder",(req,res) => {
             response["describe"] = "结算成功~~~\n总价是" + (totpay+oridic["pay"]).toString() + "元";
             res.send(response);
         });
-        var tsid = "ts" + Tools.toId(vr.numcount['ts'] + 1);
-        sqldic = {...vr.getdic("insert","trans"),'equal':{"tsid":tsid,"oid":oid,"fid":null,"starttime":null,"endtime":null,
-                                                          "status":0,"pay":oridic["pay"]}
-        };
-        sql = toSelect.tosql(sqldic);
-        console.log(sql,'\n');
-        db.dbpool.query(sql,(err,dbres) =>{
-            if(err){
-                console.log(err);
-                return;
-            }
-            vr.numcount['ts'] += 1;
-        });
-       
     });
 });
 module.exports = server;

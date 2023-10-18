@@ -71,6 +71,23 @@ server.post('/Mytrans',(req,res) => {
     });
 });
 
+server.post('/MyOrders',(req,res) => {
+    cid = req.session.uid;
+    sqldic = {...vr.getdic("select","myorders"),"attribute":["*"],"equal":{"cid":cid}};
+    var sql = toSelect.tosql(sqldic);
+    console.log(sql,'\n');
+    db.dbpool.query(sql,(err,dbres)=>{
+        response = vr.response;
+        if(err){
+            vr.dberr(err,res);
+            return;
+        }
+        response["orders"] = dbres["rows"];
+        res.send(response);
+    });
+});
+
+
 server.post('/OperateTrans',(req,res) => {
     body = "";
     req.on('data',chunk => {
