@@ -46,8 +46,9 @@ server.post('/show_goods',(req,res) =>{
                 result["gids"].push(dbres.rows[i]["gid"]);
             }
             //result["gids"].push(dbres.rows[0]["gid"]);
-            res.contentType = 'application/x-www-form-urlencoded';
+            //res.contentType = 'application/x-www-form-urlencoded';
             res.send(result);
+            console.log(result);
         })
     });
 });
@@ -59,8 +60,8 @@ server.post('/select_goods',(req,res) => {
     req.on('end',()=>{
         body.dic = JSON.parse(body.ori);
         let gid = body.dic["gid"];
-        let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".registermsg.uid = \"WWDLDG\".goods.sid"}};
-        sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".registermsg";
+        let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".seller.sid = \"WWDLDG\".goods.sid"}};
+        sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".seller";
         let sql = toSQL.toSelect(sqldic);
         //console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) => {

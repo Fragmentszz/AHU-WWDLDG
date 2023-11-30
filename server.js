@@ -43,6 +43,7 @@ let sessionmiddle = function(req,res,next)
     }
 }
 server.use(exp.static('./html'));
+server.use(exp.static('./html/img'));
 server.use(sessionmiddle);
 server.use(showgoods);
 server.use(ShoppingCart);
