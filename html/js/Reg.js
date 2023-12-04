@@ -9,7 +9,7 @@ form.addEventListener("submit", function (event) {
     const confirmPassword = document.getElementById("confirm-password").value;
     const qq = document.getElementById("qq").value;
     const phone = document.getElementById("phone").value;
-    const dic = {"s" : "卖家","c":"买家","f":"配送员"};
+    const dic = {"s" : "教师","c":"学生","f":"管理员"};
     if (accountType && account && password && confirmPassword) {
         if (password === confirmPassword) {
             var xhr = new XMLHttpRequest();

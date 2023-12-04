@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>发布二手物品</title>
+    <title>开设课程</title>
     <link href="css/ReleaseGoods.css" rel = "stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>发布二手物品</h1>
+        <h1>开设课程</h1>
         <form action="submit.php" method="post">
-            <label for="itemName">物品名称：</label>
+            <label for="itemName">课程名称：</label>
             <input type="text" id="itemName" name="itemName" required>
             
-            <label for="itemPrice">价格：</label>
+            <label for="itemPrice">学分：</label>
             <input type="text" id="itemPrice" name="itemPrice" required>
             
             <label for="itemDescription">描述：</label>
@@ -21,17 +21,17 @@
             
             <label for="itemCategory">分类：</label>
             <select id="itemCategory" name="itemCategory" required>
-                <option value="生活用品">生活用品</option>
-                <option value="交通工具">交通工具</option>
-                <option value="学习用品">学习用品</option>
-                <option value="其他">其他</option>
+                <option value="公共基础课">公共基础课</option>
+                <option value="实践教育课">实践教育课</option>
+                <option value="通识选修课">通识选修课</option>
+                <option value="专业核心课">专业核心课</option>
                 <!-- 添加更多分类选项 -->
             </select>
 
             <label for="itemQuantity">数量：</label>
             <input type="number" id="itemQuantity" name="itemQuantity" required min="1">
             
-            <button type="submit">发布物品</button>
+            <button type="submit">开设课程</button>
         </form>
     </div>
 </body>

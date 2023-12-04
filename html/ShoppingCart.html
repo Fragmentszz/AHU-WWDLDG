@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>购物车</title>
+    <title>已选课程</title>
     <link href="css/ShoppingCart.css" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>购物车</h1>
+        <h1>已选课程</h1>
     </header>
     <main>
         
@@ -16,8 +16,8 @@
             <thead>
                 <tr>
                     <th>选择</th>
-                    <th>商品</th>
-                    <th>价格</th>
+                    <th>课程</th>
+                    <th>学分</th>
                     <th>分类</th>
                     <th>数量</th>
                     <th>操作</th>
@@ -27,12 +27,12 @@
             </tbody>
         </table>
         <div class="cart-summary">
-            <label for="address">收货地址：</label>
+            <label for="address">通讯地址：</label>
             <input type="text" id="address" name="address" required>
-            <label for="pay">运送报酬：￥</label>
+            <label for="pay">选课报酬：￥</label>
             <input type="text" id="pay" name="pay" required>
-            <p>总价: ￥<span id="total-price">0.00</span></p>
-            <button id="checkout-button">结算</button>
+            <p>选课总学分<span id="total-price">0.00</span></p>
+            <button id="checkout-button">选课</button>
         </div>
     </main>
     <script src="js/ShoppingCart.js"></script>

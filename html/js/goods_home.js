@@ -2,8 +2,8 @@ var nowid = 0;
 var gids = [];
 var over = 0;
 let dic = ["describe","price","qq","lab"];
-let dic2 = ["描述：","价格:￥","卖家QQ:","类别:"];
-let trans = {"other":"其他","life":"生活用品","study":"学习用品","transport":"交通工具"};
+let dic2 = ["描述","学分","上课教室","类别"];
+let trans = {"other":"专业核心课","life":"公共基础课","study":"通识选修课","transport":"实践教育课"};
 var nowlab = "null";
 let exit = function(xhr)
 {
@@ -137,7 +137,7 @@ function create(nowgoods)
             div.className = "item_detail";
             var p;
             p = document.createElement('h3');
-            p.innerHTML = "物品名称:" + result["gname"];
+            p.innerHTML = "课程名称:" + result["gname"];
             div.appendChild(p);
             for(i=0;i<4;i++)
             {
@@ -154,7 +154,7 @@ function create(nowgoods)
                 Post(nowgoods);
                 console.log(nowgoods);
             });
-            p.innerText = "加入购物车";
+            p.innerText = "选课";
             div.appendChild(p);
             let p2 = document.createElement("img");
             p2.src = result["img"];

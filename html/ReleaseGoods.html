@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>发布二手物品</title>
+    <title>教师开课</title>
     <link href="css/ReleaseGoods.css" rel = "stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>发布二手物品</h1>
+        <h1>教师开课</h1>
         <form id="goods">
-            <label for="itemName">物品名称：</label>
+            <label for="itemName">课程名称：</label>
             <input type="text" id="gname" name="gname" required>
             
-            <label for="itemPrice">价格：</label>
+            <label for="itemPrice">学分：</label>
             <input type="text" id="price" name="price" required>
             
             <label for="itemDescription">描述：</label>
@@ -21,17 +21,17 @@
             
             <label for="itemCategory">分类：</label>
             <select id="lab" name="lab" required>
-                <option value="life">生活用品</option>
-                <option value="transport">交通工具</option>
-                <option value="study">学习用品</option>
-                <option value="other">其他</option>
+                <option value="life">公共基础课</option>
+                <option value="transport">实践教育课</option>
+                <option value="study">通识选修课</option>
+                <option value="other">专业核心课</option>
                 <!-- 添加更多分类选项 -->
             </select>
 
             <label for="itemQuantity">数量：</label>
             <input type="number" id="count" name="count" required min="1">
             <input type="file" id="image" name="image" accept="image/*" required>
-            <button type="submit" id="submitbutton">发布物品</button>
+            <button type="submit" id="submitbutton">开设课程</button>
         </form>
     </div>
     <script src="js/RelearseGoods.js"></script>

@@ -32,7 +32,7 @@ let updateShoppingCarts = function(req,id)
                 refreshtot();
             }
         }else{
-            alert("修改购物车失败...数据库错误!");
+            alert("修改失败...数据库错误!");
         }
     };
     var jsonRequestData = JSON.stringify(req);
@@ -77,7 +77,7 @@ let addListener =  function() {
             var nowid = this.getAttribute("id");
             console.log(num[nowid],maxnum[nowid]);
             if(num[nowid] + 1 > maxnum[nowid]){
-                alert("超出物品最大数量！");
+                alert("超出选课最大数量！");
                 return;
             }
             var req = template;
@@ -93,7 +93,7 @@ let addListener =  function() {
             var nowid = this.getAttribute("id");
             console.log(num[nowid],maxnum[nowid]);
             if(num[nowid] < 1){
-                alert("物品都没了！");
+                alert("课程都没了！");
                 return;
             }
             var req = template;
@@ -126,7 +126,7 @@ let refresh = function() {
     }
     
     if (gids.length == 0) {
-        alert("没物品啦!!");
+        alert("没课程啦!!");
         refreshtot();
         return;
     }
@@ -158,7 +158,7 @@ let getGids = function()
     xhr.send("");
 }
 let dic = ["gname","price","lab"];
-var trans = {"other":"其他","life":"生活用品","study":"学习用品","transport":"交通工具"};
+var trans = {"other":"专业核心课","life":"公共基础课","study":"通识选修课","transport":"实践教育课"};
 let create = function(id)
 {
     var tbody = document.getElementById("tbody");
@@ -232,7 +232,7 @@ let checkout = function()
     };
     console.log(dic);
     if( address === ""){
-        alert("请输入您的地址！");
+        alert("请输入您的联系方式");
         return;
     }
     let callback = function(xhr,params){

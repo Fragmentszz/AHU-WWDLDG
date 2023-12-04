@@ -51,7 +51,7 @@ function refresh(){
         deliveryList.removeChild(deliveryList.firstChild);
     }    
     if(deliveryData.length === 0){
-        alert("当前没有递送任务~");
+        alert("当前没有课程申请~");
         return;
     }
 // 动态生成递送任务列表的表格行
@@ -110,6 +110,6 @@ function Operation(action) {
     };
     POST('/OperateTrans',dic,callback,{});
   } else {
-    alert("您还没有选中任何递送任务哦~");
+    alert("您还没有选中任何课程申请哦~");
   }
 }

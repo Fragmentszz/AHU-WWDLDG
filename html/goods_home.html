@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>二手物品交易平台</title>
+    <title>安徽大学教务管理系统</title>
     <link href="css/goods_home.css" rel = "stylesheet">
 </head>
 <body>
     
     <header>
-        <h1>二手物品交易平台</h1>
+        <h1>安徽大学教务管理系统</h1>
         <div class="search-box">
             <input type="text" id="search-input" placeholder="搜索商品...">
             <button id="searchbutton">搜索</button>
         </div>
         <div class="sort-dropdown">
-            <label for="sort-select">价格排序：</label>
+            <label for="sort-select">学分排序：</label>
             <select id="sort-select">
                 <option value="random">任意</option>
                 <option value="asc">升序</option>
@@ -25,14 +25,14 @@
         </div>
         <div>
             <button id="allgoods" class="category-button"  onclick = "getGids(this)" attr = "null">全部</button>
-            <button class="category-button" onclick = "getGids(this)" attr = "life">生活用品</button>
-            <button class="category-button" onclick = "getGids(this)" attr = "transport">交通工具</button>
-            <button class="category-button" onclick = "getGids(this)" attr = "study">学习用品</button>
-            <button class="category-button" onclick = "getGids(this)" attr = "other">其他</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "life">公共基础课</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "transport">实践教育课</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "study">通识选修课</button>
+            <button class="category-button" onclick = "getGids(this)" attr = "other">专业核心课</button>
         </div>
     </header>
     <div id = "items" class="container">
-        <h2>二手物品列表</h2>
+        <h2>课程列表</h2>
     </div>
     <script>
     </script>
