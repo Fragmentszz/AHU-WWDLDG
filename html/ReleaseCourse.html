@@ -1,0 +1,84 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师开课</title>
+    <link href="css/ReleaseGoods.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>教师开课</h1>
+        <form id="goods">
+            <label for="itemName">课程名称：</label>
+            <input type="text" id="Cname" name="Cname" required="">
+            
+            <label for="itemPrice">学分：</label>
+            <input type="text" id="credit" name="credit" required="">
+            
+            <label for="itemDescription">描述：</label>
+            <textarea id="describe" name="describe" rows="4" required=""></textarea>
+            
+            <label for="itemCategory">分类：</label>
+            <select id="Ctype" name="Ctype" required="">
+                <option value=0>公共基础课</option>
+                <option value=1>实践教育课</option>
+                <option value=2>通识选修课</option>
+                <option value=3>专业核心课</option>
+                <!-- 添加更多分类选项 -->
+            </select>
+            
+            <label for="itemQuantity">总学时数</label>
+            <input type="number" id="totcount" name="totcount" required="" min="1">
+
+            <div>
+                <select id="Croom_1" name="Cromm_1" required="">
+                    <option value="BB">博北</option>
+                    <option value="BN">博南</option>
+                    <option value="DB">笃北</option>
+                    <option value="DN">笃南</option>
+                    <!-- 添加更多分类选项 -->
+                </select>
+                <select id="Croom_2" name="Cromm_2" required="">
+                    <option value="1">一楼</option>
+                    <option value="2">二楼</option>
+                    <option value="3">三楼</option>
+                    <option value="4">四楼</option>
+                    <!-- 添加更多分类选项 -->
+                </select>
+                <label for="itemQuantity">教室号</label>
+                <input type="number" id="Croom_3" name="Cromm_3" required="" min="1" max="10">
+            </div>
+
+
+            <div>
+                <select id="Ctime_1" name="Ctime_1" required="">
+                    <option value=1>周一</option>
+                    <option value=2>周二</option>
+                    <option value=3>周三</option>
+                    <option value=4>周四</option>
+                    <option value=5>周五</option>
+                    <option value=6>周六</option>
+                    <option value=7>周日</option>
+                    <!-- 添加更多分类选项 -->
+                </select>
+                <select id="Ctime_2" name="Ctime_2" required="">
+                    <option value="0000000000011">1,2节</option>
+                    <option value="0000000001100">3,4节</option>
+                    <option value="0000000011100">3,4,5节</option>
+                    <option value="0000001100000">6,7节</option>
+                    <option value="0000011100000">6,7,8节</option>
+                    <option value="0000110000000">8,9节</option>
+                    <option value="0001110000000">8,9,10节</option>
+                    <option value="1110000000000">11,12,13节</option>
+                    <!-- 添加更多分类选项 -->
+                </select>
+            </div>
+
+            
+            <!-- <input type="file" id="image" name="image" accept="image/*" required> -->
+            <button type="submit" id="submitbutton">开设课程</button>
+        </form>
+    </div>
+    <script src="./js/RelearseCourse.js"></script>
+
+
+</body></html>

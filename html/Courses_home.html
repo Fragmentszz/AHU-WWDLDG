@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安徽大学教务管理系统</title>
+    <link href="css/goods_home.css" rel = "stylesheet">
+</head>
+<body>
+    
+    <header>
+        <h1>安徽大学教务管理系统</h1>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="搜索商品...">
+            <button id="searchbutton">搜索</button>
+        </div>
+        <div class="sort-dropdown">
+            <label for="sort-select">学分排序：</label>
+            <select id="sort-select">
+                <option value="random">任意</option>
+                <option value="asc">升序</option>
+                <option value="desc">降序</option> 
+            </select>
+
+        </div>
+        <div>
+            <button id="allgoods" class="category-button"  onclick = "getcids(this)" attr = "null">全部</button>
+            <button class="category-button" onclick = "getcids(this)" attr = 0>公共基础课</button>
+            <button class="category-button" onclick = "getcids(this)" attr = 1>实践教育课</button>
+            <button class="category-button" onclick = "getcids(this)" attr = 2>通识选修课</button>
+            <button class="category-button" onclick = "getcids(this)" attr = 3>专业核心课</button>
+        </div>
+    </header>
+    <div id = "items" class="container">
+        <h2>课程列表</h2>
+    </div>
+    <script>
+    </script>
+
+    <script src = "js/Courses_home.js"></script>
+    
+</body>
+</html>

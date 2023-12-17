@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态更新选项</title>
+</head>
+<body>
+
+  <label for="mainOptions">选择主要选项：</label>
+  <select id="mainOptions" onchange="updateSubOptions()">
+    <option value="option1">选项1</option>
+    <option value="option2">选项2</option>
+    <option value="option3">选项3</option>
+  </select>
+
+  <br>
+
+  <label for="subOptions">子选项：</label>
+  <select id="subOptions">
+    <!-- 子选项将在选择主要选项后通过JavaScript更新 -->
+  </select>
+
+  <script>
+    function updateSubOptions() {
+      // 获取主要选项的值
+      var mainOptions = document.getElementById("mainOptions");
+      var selectedMainOption = mainOptions.options[mainOptions.selectedIndex].value;
+
+      // 获取子选项的select元素
+      var subOptions = document.getElementById("subOptions");
+
+      // 清空子选项
+      subOptions.innerHTML = "";
+
+      // 根据选择的主要选项动态添加子选项
+      if (selectedMainOption === "option1") {
+        subOptions.add(new Option("子选项1-1", "subOption1-1"));
+        subOptions.add(new Option("子选项1-2", "subOption1-2"));
+      } else if (selectedMainOption === "option2") {
+        subOptions.add(new Option("子选项2-1", "subOption2-1"));
+        subOptions.add(new Option("子选项2-2", "subOption2-2"));
+      } else if (selectedMainOption === "option3") {
+        subOptions.add(new Option("子选项3-1", "subOption3-1"));
+        subOptions.add(new Option("子选项3-2", "subOption3-2"));
+      }
+    }
+  </script>
+
+</body>
+</html>

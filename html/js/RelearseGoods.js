@@ -1,6 +1,5 @@
 let POST = function(dic)
 {
-
     var formData = new FormData();
     var fileobj  = document.getElementById("image").files[0];
     formData.append('image',fileobj);
