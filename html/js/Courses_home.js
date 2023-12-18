@@ -36,6 +36,7 @@ window.onscroll = function() {
                 nowid++;
             }
             else if(!over){
+                // 滚动已经到底,说明没有其他课程了
                 alert("到底了");
                 over = 1;
             }
@@ -160,7 +161,7 @@ function create(nowgoods)
             // p2.className = "item_img";
             // div2.appendChild(p2);
             var iframe = document.createElement('iframe');
-            iframe.src = '/Course_comments.html&' + 'cid=' + cids[i];
+            iframe.src = '/Course_comments.html?' + 'cid=' + cids[nowgoods];
             iframe.width = '600';
             iframe.height = '400';
             iframe.frameBorder = '0';

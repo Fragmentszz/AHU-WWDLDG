@@ -11,10 +11,9 @@ server.post('/login_c',(req,res) => {
         body.ori += chunk;
     });              //登陆button
     req.on('end',()=>{
-        //res.setHeader("Access-Control-Allow-Origin", "*");
         console.log(body.ori);
         body.dic = JSON.parse(body.ori);
-        sqldic = {...vr.login_dic,"attribute":["uid","pswrd"],"equal":{"username":body.dic["username"]}};
+        sqldic = {...vr.getdic("select","registermsg"),"attribute":["uid","pswrd"],"equal":{"username":body.dic["username"]}};
         console.log(sqldic);
         let sql = toSQL.tosql(sqldic);
         console.log(sql,'\n');
@@ -27,6 +26,7 @@ server.post('/login_c',(req,res) => {
             }
             if(dbres.rowCount == 0) res.send({"error_code" :1,"uid" : ""});
             else{
+                console.log(dbres.rows[0].uid);
                 if(dbres.rows[0].pswrd === body.dic["pswrd"]){
                     Tools.log(dbres.rows[0].uid + ' ' + body.dic["username"] + '登陆');
                     req.session.uid = dbres.rows[0].uid;

@@ -51,6 +51,5 @@ server.post('/register_c',(req,res) => {
             }
         });
     });
-
 });
 module.exports = server;

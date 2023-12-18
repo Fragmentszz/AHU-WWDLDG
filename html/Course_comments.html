@@ -32,31 +32,19 @@
     <h1>评论页面</h1>
 
     <!-- 表格显示评论 -->
-    <table>
-        <thead>
+    <table id = "commentTable">
+        <thead >
             <tr>
-                <th>ID</th>
-                <th>用户</th>
+                <th>用户id</th>
+                <th>评分</th>
                 <th>评论内容</th>
                 <th>时间</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>用户1</td>
-                <td>这是第一条评论。</td>
-                <td>2023-01-01 12:34:56</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>用户2</td>
-                <td>很有趣的页面。</td>
-                <td>2023-01-02 09:00:00</td>
-            </tr>
+        <tbody id = "commentBody">
             <!-- 更多评论行... -->
         </tbody>
     </table>
-
+<script src = "./js/Course_comments.js"></script>
 </body>
 </html>

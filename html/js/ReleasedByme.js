@@ -1,8 +1,8 @@
 var nowid = 0;
-var gids = [];
+var cids = [];
 var over = 0;
-let dic = ["describe","price","qq","lab"];
-let dic2 = ["描述","学分","上课教室","类别"];
+let dic = ["cname","tname","credit","describe","totcount","ctime","croom","ctype"];
+let dic2 = ["课程名称:","上课教师:","学分数:","课程简介:","总学时数:","上课时间:","上课教室:","类别:"];
 let trans = {"other":"专业核心课","life":"公共基础课","study":"通识选修课","transport":"实践教育课"};
 var nowlab = "null";
 
@@ -12,7 +12,7 @@ function refresh()
     while (items.length > 0) {
         items[0].parentNode.removeChild(items[0]);
     }
-    for(let i = 0; i < 5 && nowid < gids.length; i++) {
+    for(let i = 0; i < 5 && nowid < cids.length; i++) {
         create(nowid);
         nowid++;
     }
@@ -24,7 +24,7 @@ window.onscroll = function() {
         // 判断是否滚动到页面底部
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
             // 滚动到页面底部时执行的代码
-            if(nowid < gids.length && !over){
+            if(nowid < cids.length && !over){
                 create(nowid);
                 nowid++;
             }
@@ -42,9 +42,8 @@ function getGids(button)
     xhr.onload = function() {
         var response = JSON.parse(xhr.responseText);
         if (xhr.status === 200) {
-            
-            gids = response["gids"];
-            console.log(gids.length);
+            cids = response["cids"];
+            console.log(cids.length);
             nowlab = attr;
             nowid = 0;
             refresh();
@@ -66,12 +65,12 @@ function getGids(button)
 function search_goods(sqldic)
 {
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/search_goods_byNames", false);
+    xhr.open("POST", "/search_course_byNames", false);
     xhr.onload = function() {
         var response = JSON.parse(xhr.responseText);
         if (xhr.status === 200) {
-            gids = response["gids"];
-            console.log(gids.length);
+            cids = response["cids"];
+            console.log(cids.length);
             nowid = 0;
             refresh();
             over = 0;
@@ -112,19 +111,21 @@ function Post(id)
         }
     }
     var requestData = {
-        "gid":gids[id]
+        "cid":cids[id]
     };
     // 将数据转换为JSON格式
     var jsonRequestData = JSON.stringify(requestData);
     // 发送请求
     xhr.send(jsonRequestData);
 }
+
+
 function create(nowgoods)
 {
-    // if(nowgoods >= gids.length){nowgoods--;}
+    // if(nowgoods >= cids.length){nowgoods--;}
     var xhr = new XMLHttpRequest();
-    let gid = gids[nowgoods];
-    xhr.open("POST", "/select_goods", false);
+    let cid = cids[nowgoods];
+    xhr.open("POST", "/select_course", false);
     xhr.onload = function() {
         if (xhr.status === 200) {
             // 请求成功，处理响应数据
@@ -137,38 +138,38 @@ function create(nowgoods)
             div.className = "item_detail";
             var p;
             p = document.createElement('h3');
-            p.innerHTML = "课程名称:" + result["gname"];
+            p.innerHTML = "课程名称:" + result["cname"];
             div.appendChild(p);
-            for(i=0;i<4;i++)
+            for(i=1;i<dic.length;i++)
             {
                 p = document.createElement('p');
-                if(i != 3)  {
-                    p.id = index + '_' + dic[i];p.className = dic[i];p.innerHTML = dic2[i] + result[dic[i]];
-                }else {
-                    p.id = index + '_' + dic[i];p.className = dic[i];p.innerHTML = dic2[i] + trans[result[dic[i]]];
-                }
+                p.id = index + '_' + dic[i];p.className = dic[i];p.innerHTML = dic2[i] + result[dic[i]];
                 div.appendChild(p);
             }
-            p = document.createElement("button");p.id = index + '_' + 'button';p.className  = "buy-button";
-            p.addEventListener('click',function(){
-                Post(nowgoods);
-                console.log(nowgoods);
-            });
-            p.innerText = "撤回开设课程";
-            div.appendChild(p);
-            let p2 = document.createElement("img");
-            p2.src = result["img"];
-            p2.className = "item_img";
-            div2.appendChild(p2);
+            // p = document.createElement("button");p.id = index + '_' + 'button';p.className  = "buy-button";
+            // p.addEventListener('click',function(){
+            //     Post(nowgoods);
+            // });
+            // p.innerText = "选课";
+            // div.appendChild(p);
+            // let p2 = document.createElement("img");
+            // p2.src = result["img"];
+            // p2.className = "item_img";
+            // div2.appendChild(p2);
+            var iframe = document.createElement('iframe');
+            iframe.src = '/Course_comments.html?' + 'cid=' + cids[nowgoods];
+            iframe.width = '600';
+            iframe.height = '400';
+            iframe.frameBorder = '0';
+            div2.appendChild(iframe);
             div2.appendChild(div);
-            div2.id = index;
             document.getElementById("items").appendChild(div2);
         } else {
-            return;
+            exit(xhr);
         }
     };
     var requestData = {
-        "gid":gid
+        "cid":cid
     };
     // 将数据转换为JSON格式
     var jsonRequestData = JSON.stringify(requestData);

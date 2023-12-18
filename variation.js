@@ -56,7 +56,7 @@ let insert_g_dic = {
     "object" : "\"WWDLDG\".goods",
     "restriction":""
 }
-var numcount = {"c":0,"s":0,"f":0,"g":0,"o":0,"img":0,"ts":0};
+var numcount = {"SB":0,"DS":0,"GG":0,"ZX":0,"SJ":0,"TS":0,"T":0};
 let response = {
     "status":0,
     "describe":""
@@ -84,8 +84,67 @@ function send(res,status,describe)
     res.send(re);
 }
 
-getdic("select","ShoppingCarts");
+buildingdic = {"BB":"博北","BN":"博南","DB":"笃北","DN":"笃南"}
+weekdic = {"1":"星期一","2":"星期二","3":"星期三","4":"星期四","5":"星期五","6":"星期六","7":"星期日"}
+function parseClassromm(classid)
+{
+    var res = ""
+    res = buildingdic[classid.substr(0,2)] +  classid.substr(2);
+    return res;
+}
+
+function getOccupiedClasses(timenumber) {
+    let binaryString = timenumber.toString(2).padStart(13, '0');
+    // 将二进制字符串转换为整数
+    const decimalValue = parseInt(binaryString, 2);
+    // 将整数转换为二进制表示，并将其反转以便 easier 处理
+    const reversedBinaryString = decimalValue.toString(2).split('').reverse().join('');
+    // 找出连续有课的区间
+    let start = -1;
+    let end = -1;
+    const occupiedRanges = [];
+    for (let i = 0; i < reversedBinaryString.length; i++) {
+        if (reversedBinaryString[i] === '1') {
+            if (start === -1) {
+                start = i + 1; // 加1是因为索引从0开始，而你的课程是从第1节开始的
+            }
+            end = i + 1;
+        } else {
+            if (start !== -1) {
+                occupiedRanges.push({ start, end });
+                start = -1;
+                end = -1;
+            }
+        }
+    }
+    if(start != -1){
+        occupiedRanges.push({ start, end });
+    }
+    // 输出结果
+    if (occupiedRanges.length > 0) {
+        const result = occupiedRanges.map(range => `${range.start}-${range.end}节`).join("，");
+        return result;
+    } else {
+        return "没有课..."
+    }
+}
+
+
+function parseTimeStatus(timestatus)
+{
+    var res = "";
+    res = weekdic[Math.floor(timestatus / 8192)] + ':' + getOccupiedClasses(timestatus % 8192);
+    return res;
+}
+
+//console.log(parseTimeStatus(24579));
+// // 示例
+// const binaryStringExample = "1000000000001";
+// getOccupiedClasses(binaryStringExample);
+
+
+typelist = ["公共基础课","实践教育课","通识选修课","专业必修课"];
 module.exports = {
     login_dic,register_dic,select_c_dic,select_f_dic,select_g_dic,select_s_dic,insert_c_dic,insert_f_dic,insert_g_dic,insert_s_dic,numcount,getdic,response,
-    dberr,send
+    dberr,send,parseClassromm,parseTimeStatus,typelist
 };

@@ -6,6 +6,7 @@ const Tools = require('./Tools');
 
 server.post('/GetProfile',(req,res) => {
     var uid = req.session.uid;
+    console.log(uid)
     let sqldic = {...vr.getdic("select","registermsg"),"attribute":["*"],"equal":{"uid":uid}};
     var sql = toSelect.tosql(sqldic);
     console.log(sql,'\n');
@@ -23,24 +24,24 @@ server.post('/GetProfile',(req,res) => {
     })
 });
 
-server.post('/GetProfile_F',(req,res) => {
-    var uid = req.session.uid;
-    let sqldic = {...vr.getdic("select","profile_f"),"attribute":["*"],"equal":{"uid":uid}};
-    var sql = toSelect.tosql(sqldic);
-    console.log(sql,'\n');
-    var response = vr.response;
-    db.dbpool.query(sql,(err,dbres) =>{
-        if(err){
-            console.log(err);
-            res.statusCode = 500;
-            response["describe"] = "查询失败";
-            res.send(response);
-            return;
-        }
-        //console.log(dbres);
-        res.send(dbres["rows"][0]);
-    })
-});
+// server.post('/GetProfile_F',(req,res) => {
+//     var uid = req.session.uid;
+//     let sqldic = {...vr.getdic("select","profile_f"),"attribute":["*"],"equal":{"uid":uid}};
+//     var sql = toSelect.tosql(sqldic);
+//     console.log(sql,'\n');
+//     var response = vr.response;
+//     db.dbpool.query(sql,(err,dbres) =>{
+//         if(err){
+//             console.log(err);
+//             res.statusCode = 500;
+//             response["describe"] = "查询失败";
+//             res.send(response);
+//             return;
+//         }
+//         //console.log(dbres);
+//         res.send(dbres["rows"][0]);
+//     })
+// });
 
 server.post('/UpdateProfile',(req,res) => {
     var body = {"ori":""};

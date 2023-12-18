@@ -1,7 +1,7 @@
 const exp = require("express");
 const server = exp.Router();
 const ejs = require("ejs");
-const db = require('./testdb');
+const db = require('./testdb.js');
 const toSQL = require('./tosql');
 const vr = require('./variation');
 const { select_g_dic } = require("./variation");
@@ -23,12 +23,12 @@ server.post('/show_goods',(req,res) =>{
     req.on('end',()=>{
         body.dic = JSON.parse(body.ori);
         attr = body.dic["attr"];
-        let sqldic = {...vr.select_g_dic,"attribute":["cid"],"equal":{}};
+        let sqldic = {...vr.getdic("select","course_available"),"attribute":["cid"],"equal":{}};
         if(attr != "null" && attr != "my"){
             sqldic["equal"] = {"ctype":attr};
         }
         if(typeof body.dic["sid"] != "undefined"){
-            sqldic["equal"]["sid"] = req.session.uid;
+            sqldic["equal"]["jid"] = req.session.uid;
         }
         let sql = toSQL.toSelect(sqldic);
         console.log(sql,'\n');
@@ -46,20 +46,21 @@ server.post('/show_goods',(req,res) =>{
                 result["cids"].push(dbres.rows[i]["cid"]);
             }
             res.send(result);
-            console.log(result);
         })
     });
 });
-server.post('/select_goods',(req,res) => {
+
+
+server.post('/select_course',(req,res) => {
     var body = {ori:"",dic:{}};
     req.on('data', chunk=>{
         body.ori += chunk;
     });   
     req.on('end',()=>{
         body.dic = JSON.parse(body.ori);
-        let gid = body.dic["gid"];
-        let sqldic = {...vr.select_g_dic,"attribute":["\"WWDLDG\".goods.*,qq"],"equal":{"gid":gid,"connection":"\"WWDLDG\".seller.sid = \"WWDLDG\".goods.sid"}};
-        sqldic["object"] = "\"WWDLDG\".goods, \"WWDLDG\".seller";
+        let cid = body.dic["cid"];
+        let sqldic = {...vr.getdic("select","course"),"attribute":["\"WWDLDG\".course.*,tname"],"equal":{"cid":cid,"connection":"\"WWDLDG\".teacher.jid = \"WWDLDG\".course.jid"}};
+        sqldic["object"] = "\"WWDLDG\".course, \"WWDLDG\".teacher";
         let sql = toSQL.toSelect(sqldic);
         //console.log(sql,'\n');
         db.dbpool.query(sql,(err,dbres) => {
@@ -69,28 +70,32 @@ server.post('/select_goods',(req,res) => {
                 res.send("no");
                 return;
             }
-            //console.log(dbres);
-            res.send(dbres.rows[0]);
+            newrow = dbres.rows[0];
+            newrow["croom"] = vr.parseClassromm(newrow.croom);
+            newrow["ctime"] = vr.parseTimeStatus(newrow.ctime);
+            newrow["ctype"] = vr.typelist[(newrow.ctype)];
+            res.send(newrow);
         });
     })
 });
-server.post('/search_goods_byNames',(req,res) =>{
+
+
+server.post('/search_course_byNames',(req,res) =>{
     var body = {ori:"",dic:{}};
     req.on('data', chunk=>{
         body.ori += chunk;
     });
     req.on('end',() => {
         body.dic = JSON.parse(body.ori);
-        var sqldic = {...vr.select_g_dic,"attribute":["gid"],"equal":{}};
-        sqldic["object"] = "\"WWDLDG\".goods";
-        if(body.dic["lab"] != "null"){
-            sqldic["equal"]["lab"] = body.dic["lab"];
+        var sqldic = {...vr.getdic("select","course_available"),"attribute":["cid"],"equal":{}};
+        if(body.dic["ctype"] != "null"){
+            sqldic["equal"]["ctype"] = body.dic["ctype"];
         }
-        if(body.dic["gname"] != ""){
-            sqldic["equal"]["LIKE"] ="\"WWDLDG\".goods.gname" + " LIKE " + "\'%" + body.dic["gname"] + "%\'";
+        if(body.dic["cname"] != ""){
+            sqldic["equal"]["LIKE"] ="\"WWDLDG\".course_available.cname" + " LIKE " + "\'%" + body.dic["cname"] + "%\'";
         }
         if(body.dic["restriction"] != ""){
-            sqldic["restriction"] = "\nOrder BY price " + body.dic["restriction"];
+            sqldic["restriction"] = "\nOrder BY credit " + body.dic["restriction"];
         }
         let sql = toSQL.toSelect(sqldic);
         console.log(sql,'\n');
@@ -101,10 +106,10 @@ server.post('/search_goods_byNames',(req,res) =>{
                 res.send("no");
                 return;
             }
-            result = {"gids":[]};
+            result = {"cids":[]};
             for(i=0;i<dbres["rows"].length;i++)
             {
-                result["gids"].push(dbres.rows[i]["gid"]);
+                result["cids"].push(dbres.rows[i]["cid"]);
             }
             res.send(result);
         });
@@ -112,32 +117,52 @@ server.post('/search_goods_byNames',(req,res) =>{
 });
 
 server.post('/addintoSC',(req,res) => {
-    var oid = req.session.oid;
-    if(typeof oid === 'undefined'){
-        res.send({"status":-1,"describe":"您是个卖家哦~请登录买家账号购买物品~"});
+    var sid = req.session.uid;
+    if(typeof sid === undefined || sid[0] != 'S') {
+        res.send({"status":-1,"describe":"您好像不是一个合法的可以选课的学生!~"});
         return;
     }
     body = {ori:""};
     req.on('data', chunk=>{
         body.ori += chunk;
     });
-    req.on('end',() =>{
+    req.on('end',async () =>{
         let oridic = JSON.parse(body.ori);
-        gid = oridic["gid"];
-        sqldic = {...vr.getdic("insert","og"),"equal":{"oid":oid,"gid":gid,"count":1}};
+        //接受请求信息
+        cid = oridic["cid"];
+        //开始查询
+        var sqldic = {...vr.getdic("select","course"),"attribute":["*"],"equal":{"cid":cid}};
         var sql = toSQL.tosql(sqldic);
-        console.log(sql,'\n');
-        db.dbpool.query(sql,(err,dbres) =>{
-            if(err){
-                console.log(err);
-                if(err["code"] === '23505')   res.send({"status":1,"describe":"商品已在购物车中"});
-                else{
-                    res.send({"status":-2,"describe":"数据库错误.."});
-                }
-                return;
+        coursemsg = (await (db.asyncQuery(sql)))["dbres"][0];
+        coursetime = coursemsg["ctime"];
+        //获取天号
+        var weekday = Math.floor(coursetime / 8192);        
+        //转换为一天内时间
+        coursetime = coursetime % 8192;                    
+        console.log(coursemsg)
+        timestatus = await db.getStudentTime(sid,weekday);
+        console.log(timestatus)
+        //判断学生个人时间是否冲突!
+        if((coursetime & timestatus) > 0){
+            res.send({"status":-2,"describe":"选课时间段已有课！"});
+            return;
+        }else{
+            sqldic = {...vr.getdic("insert","sc"),"equal":{"cid":cid,"sid":sid}};
+            sqldic_timechange = {...vr.getdic("update","studenttime"),"set":{"timestatus":timestatus | coursetime},"equal":{
+                "sid":sid,"weekday":weekday
+            }};
+        //插入SC表,选课成功
+            sqldic_comments = {...vr.getdic("insert","sccomments"),"equal":{"cid":cid,"sid":sid,"credit":0,"describe":null,"commenttime":null}};
+            const {code,dbres} = await db.asyncQuery(toSQL.tosql(sqldic_timechange));
+            if(code === 0){
+                db.asyncQuery(toSQL.tosql(sqldic));
+                db.asyncQuery(toSQL.tosql(sqldic_comments));
+                //反馈信息
+                res.send({"status":0,"describe":"选课成功!"})
+            }else{
+                res.send({"status":-1,"describe":"数据库错误!"});
             }
-            res.send({"status":0,"describe":"商品添加成功!"});
-        })
+        }
     })
 })
 

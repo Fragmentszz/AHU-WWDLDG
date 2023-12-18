@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-    getcids();
+    Getcids();
+    const checkoutButton = document.getElementById('checkout-button');
+    checkoutButton.addEventListener('click',checkout);
 });
 
 var cids = [];
@@ -21,26 +23,8 @@ let refreshtot = function()
 }
 
 let addListener =  function() {
-    const cartItems = document.querySelectorAll('.cart-item');
-    const removeButtons = document.querySelectorAll('.remove-button');
-    const totalPriceSpan = document.getElementById('total-price');
-    const checkoutButton = document.getElementById('checkout-button');
+
     const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-    const incrementButtons = document.querySelectorAll('.increment-button');
-    const decrementButtons = document.querySelectorAll('.decrement-button');
-    const quantitySpans = document.querySelectorAll('.quantity');
-
-    checkoutButton.addEventListener('click',checkout);
-
-    // 删除商品项
-    // removeButtons.forEach((button, index) => {
-    //     button.addEventListener('click', function() {
-    //         var req = template;
-    //         req["delete"] = 1;
-    //         req["cid"] = cids[index];
-    //         updateShoppingCarts(req,index);
-    //     });
-    // });
 
     // 商品选择勾选事件
     itemCheckboxes.forEach((checkbox, index) => {
@@ -52,37 +36,7 @@ let addListener =  function() {
         }.bind(checkbox));
     });
 
-    // // 商品数量增加按钮事件
-    // incrementButtons.forEach((button, index) => {
-    //     button.addEventListener('click', function() {
-    //         var nowid = this.getAttribute("id");
-    //         console.log(num[nowid],maxnum[nowid]);
-    //         if(num[nowid] + 1 > maxnum[nowid]){
-    //             alert("超出选课最大数量！");
-    //             return;
-    //         }
-    //         var req = template;
-    //         req["num"] = num[nowid] + 1;
-    //         req["cid"] = cids[nowid];
-    //         updateShoppingCarts(req,nowid);
-    //     });
-    // });
 
-    // // 商品数量减少按钮事件
-    // decrementButtons.forEach((button, index) => {
-    //     button.addEventListener('click', function() {
-    //         var nowid = this.getAttribute("id");
-    //         console.log(num[nowid],maxnum[nowid]);
-    //         if(num[nowid] < 1){
-    //             alert("课程都没了！");
-    //             return;
-    //         }
-    //         var req = template;
-    //         req["num"] = num[nowid] - 1;
-    //         req["cid"] = cids[nowid];
-    //         updateShoppingCarts(req,nowid);
-    //     });
-    // });
 
  };
 //document.addEventListener('DOMContentLoaded',addListener);
@@ -91,34 +45,28 @@ var maxnum = [];
 var totcost = [];
 var price = [];
 var enable = [];
-function createtd1(tr)
-{
-    let td = document.createElement('td');
-    let button = document.createElement('button');button.className = "quantity-button decrement-button";button.innerText = '-';
-    td.appendChild(button);
-    button = document.createElement('button');button.className = "quantity-button increment-button";button.innerText = '+';
-    td.appendChild(button);
-    tr.appendChild(td);
-}
+
 let refresh = function() {
     var items = document.getElementsByClassName("cart-item");
     for(let i=items.length - 1;i >= 0;i--){
+        console.log(i);
         items[i].parentElement.removeChild(items[i]);
     }
-    
+    //选课数为0
     if (cids.length == 0) {
-        alert("没课程啦!!");
+        alert("您没选择任何课程啦!!");
         refreshtot();
         return;
     }
     for (let i = 0; i < cids.length; i++) {
+        console.log(cids[i]);
         create(i);
     }
     addListener();
     refreshtot();
 }
 
-let getcids = function()
+let Getcids = function()
 {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/getMyCourses", false);
@@ -127,8 +75,8 @@ let getcids = function()
             var response = JSON.parse(xhr.responseText);
             cids = response["cids"];
             totcost = new Array(cids.length);
-            maxnum = new Array(cids.length);
             price = new Array(cids.length);
+            enable = new Array(cids.length);
             refresh();
         } else if(xhr.status == 500){
             alert("请重新登陆");
@@ -137,8 +85,7 @@ let getcids = function()
     };
     xhr.send("");
 }
-let dic = ["cname","credit","ctype","ctime","croom"];
-//var trans = {"other":"专业核心课","life":"公共基础课","study":"通识选修课","transport":"实践教育课"};
+
 let create = function(id)
 {
     var tbody = document.getElementById("tbody");
@@ -153,10 +100,10 @@ let create = function(id)
             td.className = "detd";
             td.innerHTML = "<input type=\"checkbox\" class=\"item-checkbox\" id = \"" +  "de" + id +"\">";
             tr.appendChild(td);
+            let dic = ["cname","credit","ctype","ctime","croom"];
             for(let i=0;i<dic.length;i++){
                 td = document.createElement('td');
-                if(dic[i] != "lab")td.innerText = response[dic[i]];
-                else td.innerText = trans[response[dic[i]]];
+                td.innerText = response[dic[i]];
                 td.setAttribute("id",dic[i] + '_' + id);
                 tr.appendChild(td);
             }
@@ -192,12 +139,24 @@ let checkout = function()
         "cids":cids,
         "enable":enable
     };
+    var flag = false;
+    for(let i=0;i<enable.length;i++){
+        if(enable[i]){
+            flag = true;
+            break;
+        }
+    }
+    //没选中任何课程
+    if(flag === false){
+        alert("您没选中任何课程哦~");
+        return;
+    }
     console.log(dic);
     let callback = function(xhr,params){
         var response = JSON.parse(xhr.responseText);
         if(xhr.status === 200){
-            alert(response["describe"]);
-            getcids();
+            //alert(response["describe"]);
+            Getcids();
         }else{
             alert("请重新登陆");
             window.parent.postMessage('relogin','*');
